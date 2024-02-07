@@ -17,7 +17,7 @@ public class ConnectionManager {
 	private static final String URL = "jdbc:mysql://localhost:3306/movie_app";
 	private static final String USERNAME = "root";
     private static final String PASSWORD = "root"; // change password if needed, Mac/Linux = Root@123  |  Windows = root
-    //private static final String PASSWORD = "Root@123"; // change password if needed, Mac/Linux = Root@123  |  Windows = root
+   private static final String PASSWORD = "Root@123"; // change password if needed, Mac/Linux = Root@123  |  Windows = root
 	
 	private static Connection connection = null;
 	
