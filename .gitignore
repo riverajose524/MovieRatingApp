@@ -76,5 +76,5 @@ OS X
 ##############################
 connection manager
 ##############################
-com/cognixia/jump/movierating/connection/ConnectionManager.java
+ConnectionManager.java
 
