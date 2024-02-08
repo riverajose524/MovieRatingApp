@@ -1,10 +1,10 @@
-package com.cognixia.jump.exception;
+package com.cognixia.jump.movierating.exception;
 
 public class IncorrectEmailException extends Exception {
 	
 	private static final long serialVersionUID = 1L;
 
-		//construct the exception that is thrown when user is not found
+		//construct the exception that is thrown when incorrect email is entered
 		public IncorrectEmailException(String email) {
 			
 			super("The following: " + email + " is not a correctly written email");
