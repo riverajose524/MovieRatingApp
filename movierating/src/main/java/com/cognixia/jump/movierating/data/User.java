@@ -1,5 +1,6 @@
 package com.cognixia.jump.movierating.data;
 
+//User Model Class
 public class User {
 
 	// User's id
