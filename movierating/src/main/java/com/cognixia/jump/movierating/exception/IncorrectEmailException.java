@@ -1,4 +1,4 @@
-package com.cognixia.jump.exception;
+package com.cognixia.jump.movierating.exception;
 
 public class IncorrectEmailException extends Exception {
 	
