@@ -6,6 +6,8 @@ import java.util.List;
 import com.cognixia.jump.movierating.data.Movie;
 import com.cognixia.jump.movierating.data.MovieRating;
 import com.cognixia.jump.movierating.data.User;
+import com.cognixia.jump.movierating.exception.UserNotFoundException;
+
 
 public interface MovieRatingDao {
 	
@@ -15,7 +17,9 @@ public interface MovieRatingDao {
     // as well, this method will help with closing the connection
     public void closeConnection() throws SQLException;
     
-    public boolean userLogIn(String email, String password);
+
+    public int validateUser(String username, String password) throws UserNotFoundException;
+
     
     public List<Movie> getAllMovies();
     
@@ -24,5 +28,11 @@ public interface MovieRatingDao {
     public void register(String email, String password);
     
     public void updateMovieRating(User user,Movie selectedMovie, int rating);
+    
+    // Deletes the rating of a movie
+    boolean deleteRating(Movie selectedMovie);
+    
+    // Updates the rating of a movie
+    boolean updateRating(Movie selectedMovie, int newRating);
     
 }

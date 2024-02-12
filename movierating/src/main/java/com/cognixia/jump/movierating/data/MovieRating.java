@@ -13,6 +13,10 @@ public class MovieRating {
 		this.rating = rating;
 	}
 	
+	public MovieRating(Movie selectedMovie, int rating2) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public int getMovieID() {
 		return movieID;
 	}
