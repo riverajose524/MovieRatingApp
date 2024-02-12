@@ -23,4 +23,10 @@ public interface MovieRatingDao {
     
     public void register(String username, String password);
     
+    // Deletes the rating of a movie
+    boolean deleteRating(Movie selectedMovie);
+    
+    // Updates the rating of a movie
+    boolean updateRating(Movie selectedMovie, int newRating);
+    
 }
