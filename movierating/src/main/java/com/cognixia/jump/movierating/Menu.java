@@ -1,4 +1,5 @@
 package com.cognixia.jump.movierating;
+
 import java.util.Scanner;
 import com.cognixia.jump.movierating.dao.MovieRatingDaoImpl;
 import com.cognixia.jump.movierating.exception.UserNotFoundException;
@@ -9,35 +10,35 @@ import java.util.List;
 
 public class Menu {
 
-    //private Scanner scanner;
-    static MovieRatingDao mri = new MovieRatingDaoImpl();
-    private static Scanner scanner = new Scanner(System.in);
+	// private Scanner scanner;
+	static MovieRatingDao mri = new MovieRatingDaoImpl();
+	private static Scanner scanner = new Scanner(System.in);
 
+	public static void mainMenu() {
 
-    public static void mainMenu() {
-    	
 		try {
 			mri.establishConnection();
 		} catch (ClassNotFoundException | SQLException e1) {
 			System.out.println("\nCould not connect to the Database, application cannot run at this time.");
-		};
-        System.out.println("+========================================================+");
-        System.out.println("| Main Menu:                                             |");
-        System.out.println("+========================================================+");
-        System.out.println("| 1. REGISTER                                            |");
-        System.out.println("| 2. LOGIN                                               |");
-        System.out.println("| 3. VIEW MOVIES                                         |");
-        System.out.println("| 4. EXIT                                                |");
-        System.out.println("+========================================================+");
+		}
+		;
+		System.out.println("+========================================================+");
+		System.out.println("| Main Menu:                                             |");
+		System.out.println("+========================================================+");
+		System.out.println("| 1. REGISTER                                            |");
+		System.out.println("| 2. LOGIN                                               |");
+		System.out.println("| 3. VIEW MOVIES                                         |");
+		System.out.println("| 4. EXIT                                                |");
+		System.out.println("+========================================================+");
 
-        int choice = getChoice();
+		int choice = getChoice();
 
 		switch (choice) {
 		case 1:
 			// Handle register
 			break;
 		case 2:
-			Menu.validateUser();
+			validateUser();
 			break;
 		case 3:
 			viewMovies();
@@ -51,84 +52,79 @@ public class Menu {
 		}
 	}
 
-
 	private static int getChoice() {
 		System.out.print("Selection: ");
 		return scanner.nextInt();
-}
-    
-    static private void viewMovies() {
-        List<Movie> movies = mri.getAllMovies();
+	}
 
-        if (movies.isEmpty()) {
-            System.out.println("No movies found.");
-        } else {
-            System.out.println("+========================================================+");
-            System.out.println("| List of Movies                                         |");
-            System.out.println("+========================================================+");
-            for (Movie movie : movies) {
-                System.out.println("ID: " + movie.getId() + ", Name: " + movie.getName());
-            }
-            System.out.println("+========================================================+");
-        }
-    }
+	static private void viewMovies() {
+		List<Movie> movies = mri.getAllMovies();
 
+		if (movies.isEmpty()) {
+			System.out.println("No movies found.");
+		} else {
+			System.out.println("+========================================================+");
+			System.out.println("| List of Movies                                         |");
+			System.out.println("+========================================================+");
+			for (Movie movie : movies) {
+				System.out.println("ID: " + movie.getId() + ", Name: " + movie.getName());
+			}
+			System.out.println("+========================================================+");
+		}
+	}
 
 	public void closeScanner() {
 		scanner.close();
 	}
 
-	
+	public static void ratingMenu(String movieName) {
+		System.out.println("+========================================================+");
+		System.out.println("| Rating Menu:                                           |");
+		System.out.println("+========================================================+");
+		System.out.println("| Movie: " + movieName + "                               |");
+		System.out.println("|                                                        |");
+		System.out.println("| Rating:                                                |");
+		System.out.println("| 0. Really Bad                                          |");
+		System.out.println("| 1. Bad                                                 |");
+		System.out.println("| 2. Not Good                                            |");
+		System.out.println("| 3. Okay                                                |");
+		System.out.println("| 4. Good                                                |");
+		System.out.println("| 5. Great                                               |");
+		System.out.println("| 6. EXIT                                                |");
+		System.out.println("+========================================================+");
 
-public void ratingMenu(String movieName) {
-  System.out.println("+========================================================+");
-  System.out.println("| Rating Menu:                                           |");
-  System.out.println("+========================================================+");
-  System.out.println("| Movie: " + movieName + "                               |");
-  System.out.println("|                                                        |");
-  System.out.println("| Rating:                                                |");
-  System.out.println("| 0. Really Bad                                          |");
-  System.out.println("| 1. Bad                                                 |");
-  System.out.println("| 2. Not Good                                            |");
-  System.out.println("| 3. Okay                                                |");
-  System.out.println("| 4. Good                                                |");
-  System.out.println("| 5. Great                                               |");
-  System.out.println("| 6. EXIT                                                |");
-  System.out.println("+========================================================+");
+		int choice = getChoice();
 
-  int choice = getChoice();
+		switch (choice) {
+		case 0:
 
-  switch (choice) {
-      case 0:
-          
-          break;
-      case 1:
-          
-          break;
-      case 2:
-          
-          break;
-      case 3:
-          
-          break;
-      case 4:
-          
-          break;
-      case 5:
-          
-          break;
-      case 6:
-          
-          break;
-      default:
-          System.out.println("Invalid choice");
-  }
-}
+			break;
+		case 1:
 
-	//function to validate user
+			break;
+		case 2:
+
+			break;
+		case 3:
+
+			break;
+		case 4:
+
+			break;
+		case 5:
+
+			break;
+		case 6:
+
+			break;
+		default:
+			System.out.println("Invalid choice");
+		}
+	}
+
+	// function to validate user
 	public static void validateUser() {
-		
-	
+
 		try {
 
 			mri.establishConnection();
@@ -137,7 +133,7 @@ public void ratingMenu(String movieName) {
 
 			System.out.println("\nCould not connect to the Movie App Database, application cannot run at this time.");
 		}
-		
+
 		// create temporary strings to hold the email,
 		String email;
 
@@ -150,7 +146,7 @@ public void ratingMenu(String movieName) {
 
 		// prompt user for Email & Password
 		do {
-			
+
 			System.out.println("\nPlease enter your email: ");
 			email = sc.nextLine();
 
@@ -173,17 +169,16 @@ public void ratingMenu(String movieName) {
 				Menu.loggedInMenu(userId);
 
 				isLoginValid = true;
-				
+
 			} else {
 				System.out.println("\n**************************************");
 				System.out.println("************ Login Failed ************");
 				System.out.println("**************************************\n");
-				
+
 				Menu.mainMenu();
-				
+
 				isLoginValid = true;
-				
-				
+
 			}
 
 		} while (!isLoginValid);
@@ -191,17 +186,50 @@ public void ratingMenu(String movieName) {
 		return;
 
 	}
-	
-	
+
 	public static void loggedInMenu(int userId) {
+		List<Movie> movies = mri.getAllMovies();
+		int exitChoice = movies.size() + 1;
 		
-		System.out.println("\n+========================================================+");
-		System.out.println("| Movie              Avg. Rating            # of Ratings |");
-		System.out.println("+========================================================+");
+
+		if (movies.isEmpty()) {
+			System.out.println("No movies found.");
+		} else {
+
+			System.out.println("+========================================================+");
+			System.out.println("| Movie                          Avg. Rating                # of Ratings       |");
+
+			// Iterate through movies
+//			for (Movie movie : movies) {
+//			    System.out.printf("| %-30s %-30s %-20d |%n", movie.getName(), movie.getAvgRating().equals("N/A") ? "N/A" : String.format("%.1f", movie.getAvgRating()), movie.getNumOfRatings());
+//			    numOfMovies++;
+//			}
+
+			System.out.println("| " + exitChoice + ". EXIT                                                                                   |");
+			System.out.println("+========================================================+");
+			
+			
+			int choice = getChoice();
+			
+			if(choice == exitChoice)
+			{
+				Menu.mainMenu();
+			}
+			else if (choice < exitChoice && choice > 0)
+			{
+				String movieName = movies.get(choice).getName();
+				
+				ratingMenu(movieName);
+				
+			}
+			else
+			{
+				System.out.println("\nInvalid choice\n");
+				loggedInMenu(userId);
+			}
+			
+
+		}
 	}
-	
-	
-	
-	
-	
+
 }
