@@ -120,8 +120,10 @@ public class Menu {
 	
 	public static void loggedInMenu(int userId) {
 		
-		System.out.println("User with id " + userId + " logged in");
-
+		System.out.println("\n+========================================================+");
+		System.out.println("| Movie              Avg. Rating            # of Ratings |");
+		System.out.println("+========================================================+");
+		//AvgRating # of Ratings
 	}
 	
 	
