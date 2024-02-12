@@ -69,7 +69,7 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 						
 						//comparing case sensitivity in java
 						if(email.equals(sqlEmail) && password.equals(sqlPassword)) {
-							return resultSet.getInt("user_id");
+							return resultSet.getInt("userid");
 						}
 					}
 					
