@@ -4,6 +4,9 @@ CREATE DATABASE movie_app;
 -- Use database movie_app
 use movie_app;
 
+-- Drop tables
+drop table user;
+
 -- Create table movie 
 CREATE TABLE movie (
   id INT PRIMARY KEY,
@@ -12,7 +15,7 @@ CREATE TABLE movie (
 
 -- Create table user 
 CREATE TABLE user (
-  userid INT PRIMARY KEY,
+  userid INT PRIMARY KEY AUTO_INCREMENT,
   email VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL
 );

@@ -13,9 +13,8 @@ public class User {
 	private String password;
 
 	//Constructs the user object
-	public User(int id, String email, String password) {
+	public User(String email, String password) {
 		super();
-		this.id = id;
 		this.email = email;
 		this.password = password;
 	}
