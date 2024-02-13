@@ -82,11 +82,11 @@ public class Menu {
 		scanner.close();
 	}
 
-	public static void ratingMenu(String movieName) {
+	public static void ratingMenu(String movieName) throws SQLException {
 		System.out.println("+========================================================+");
 		System.out.println("| Rating Menu:                                           |");
 		System.out.println("+========================================================+");
-		System.out.println("| Movie: " + movieName + "                               |");
+		System.out.println("| Movie: " + movieName + "                        |");
 		System.out.println("|                                                        |");
 		System.out.println("| Rating:                                                |");
 		System.out.println("| 0. Really Bad                                          |");
@@ -102,24 +102,19 @@ public class Menu {
 
 		switch (choice) {
 		case 0:
-
 			break;
 		case 1:
 			break;
 		case 2:
-
 			break;
 		case 3:
-
 			break;
 		case 4:
-
 			break;
 		case 5:
-
 			break;
 		case 6:
-
+			loggedInMenu(1);
 			break;
 		default:
 			System.out.println("Invalid choice");
@@ -174,10 +169,6 @@ public class Menu {
 				isLoginValid = true;
 
 			} else {
-				System.out.println("\n**************************************");
-				System.out.println("************ Login Failed ************");
-				System.out.println("**************************************\n");
-
 				Menu.mainMenu();
 
 				isLoginValid = true;
@@ -192,6 +183,8 @@ public class Menu {
 
 	public static void loggedInMenu(int userId) throws SQLException {
 		List<Movie> movies = mri.getAllMovies();
+		double[] avgRatings = mri.getAverageRating();
+		int[] numberOfRatings = mri.getNumberRatings();
 		int exitChoice = movies.size() + 1;
 		int number = 1;
 		
@@ -201,19 +194,43 @@ public class Menu {
 			System.out.println("No movies found.");
 		} else {
 
-			System.out.println("+========================================================+");
-			System.out.println("| Movie                          Avg. Rating                # of Ratings       |");
+			System.out.println("+=====================================================================================+");
+			System.out.println("| Movie                                                    Avg. Rating   # of Ratings |");
 
 			// Iterate through movies
-			for (Movie movie : movies) {
-			    System.out.println("| " + number + ". " + movie.getName() );
-			    number++;
-			    ///System.out.printf("| %-30s %-30s %-20d |%n", movie.getName(),.equals("N/A") ? "N/A" : String.format("%.1f", movie.getAvgRating()), movie.getNumOfRatings());
+			for(int i = 0; i < movies.size(); i++) {
+			    String movieName = movies.get(i).getName();
+			    String avgRating="";
 			    
+			    if(avgRatings[i] > 0)
+			    {
+			    	avgRating = String.format("%.2f", avgRatings[i]); // Format average rating to 2 decimal places
+			    }
+			    else
+			    {
+			    	avgRating = "N/A";
+			    }
+			    
+			    String numRatings = String.valueOf(numberOfRatings[i]);
+			    
+			    // Calculate the space needed to align the columns
+			    int spacesMovieName = Math.max(0, 54 - movieName.length()); // Adjust as needed
+			    int spacesAvgRating = Math.max(0, 14 - avgRating.length()); // Adjust as needed
+			    int spacesNumRatings = Math.max(0, 12 - numRatings.length()); // Adjust as needed
+			    
+			    // Construct the line with proper formatting
+			    System.out.println("| " + number + ". " + movieName + " ".repeat(spacesMovieName) + avgRating + " ".repeat(spacesAvgRating) + numRatings + " ".repeat(spacesNumRatings) + " |");
+			    number++;
 			}
 
-			System.out.println("| " + exitChoice + ". EXIT                                                                                   |");
-			System.out.println("+========================================================+");
+			System.out.println("| " + exitChoice + ". EXIT                                                                             |");
+			System.out.println("+=====================================================================================+");
+
+
+
+
+
+
 			
 			
 			int choice = getChoice();
