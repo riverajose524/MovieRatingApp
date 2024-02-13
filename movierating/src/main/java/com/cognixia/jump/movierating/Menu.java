@@ -89,7 +89,7 @@ public class Menu {
 	    }
 	}
 
-	public void closeScanner() {
+	public static void closeScanner() {
 		scanner.close();
 	}
 
@@ -162,6 +162,8 @@ public class Menu {
 			System.out.println("Please enter your password: ");
 			password = sc.nextLine();
 
+			
+			
 			int userId;
 
 			// Now pass that information to the DAO implementation class
@@ -175,7 +177,7 @@ public class Menu {
 
 			if (userId > 0) {
 
-				Menu.loggedInMenu(userId);
+				loggedInMenu(userId);
 
 				isLoginValid = true;
 
@@ -198,9 +200,8 @@ public class Menu {
 		int[] numberOfRatings = mri.getNumberRatings();
 		int exitChoice = movies.size() + 1;
 		int number = 1;
+		String movieName = "";
 		
-		
-
 		if (movies.isEmpty()) {
 			System.out.println("No movies found.");
 		} else {
@@ -210,7 +211,7 @@ public class Menu {
 
 			// Iterate through movies
 			for(int i = 0; i < movies.size(); i++) {
-			    String movieName = movies.get(i).getName();
+			    movieName = movies.get(i).getName();
 			    String avgRating="";
 			    
 			    if(avgRatings[i] > 0)
@@ -241,19 +242,12 @@ public class Menu {
 //			    	    + numRatings 
 //			    	    + String.format("%" + spacesNumRatings + "s", "") 
 //			    	    + " |");
-//			    number++;
-//			}
+			    number++;
+	}
 
 			System.out.println("| " + exitChoice + ". EXIT                                                                             |");
 			System.out.println("+=====================================================================================+");
 
-
-
-
-
-
-			
-			
 			int choice = getChoice();
 			
 			if(choice == exitChoice)
@@ -262,7 +256,7 @@ public class Menu {
 			}
 			else if (choice < exitChoice && choice > 0)
 			{
-				String movieName = movies.get(choice-1).getName();
+				movieName = movies.get(choice-1).getName();
 				
 				ratingMenu(movieName);
 				
@@ -273,9 +267,9 @@ public class Menu {
 				loggedInMenu(userId);
 			}
 			
-
+			}
 		}
-	}
+	
 	
 	
 
