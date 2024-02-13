@@ -230,16 +230,19 @@ public class Menu {
 			    int spacesNumRatings = Math.max(0, 12 - numRatings.length()); // Adjust as needed
 			    
 			    // Construct the line with proper formatting
-//			    System.out.println("| " + number + ". " + movieName + " ".repeat(spacesMovieName) + avgRating + " ".repeat(spacesAvgRating) + numRatings + " ".repeat(spacesNumRatings) + " |");
-			    System.out.println("| " + number + ". " + movieName 
-			    	    + String.format("%" + spacesMovieName + "s", "") 
-			    	    + avgRating 
-			    	    + String.format("%" + spacesAvgRating + "s", "") 
-			    	    + numRatings 
-			    	    + String.format("%" + spacesNumRatings + "s", "") 
-			    	    + " |");
-			    number++;
-			}
+			    // works with older version
+			    System.out.println("| " + number + ". " + movieName + " ".repeat(spacesMovieName) + avgRating + " ".repeat(spacesAvgRating) + numRatings + " ".repeat(spacesNumRatings) + " |");
+			    
+			    //works with new java version
+//			    System.out.println("| " + number + ". " + movieName 
+//			    	    + String.format("%" + spacesMovieName + "s", "") 
+//			    	    + avgRating 
+//			    	    + String.format("%" + spacesAvgRating + "s", "") 
+//			    	    + numRatings 
+//			    	    + String.format("%" + spacesNumRatings + "s", "") 
+//			    	    + " |");
+//			    number++;
+//			}
 
 			System.out.println("| " + exitChoice + ". EXIT                                                                             |");
 			System.out.println("+=====================================================================================+");
