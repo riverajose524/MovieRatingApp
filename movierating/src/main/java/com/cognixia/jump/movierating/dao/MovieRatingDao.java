@@ -1,5 +1,6 @@
 package com.cognixia.jump.movierating.dao;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -17,7 +18,8 @@ public interface MovieRatingDao {
     // as well, this method will help with closing the connection
     public void closeConnection() throws SQLException;
     
-
+    public Connection getConnection()throws ClassNotFoundException, SQLException;
+    
     public int validateUser(String username, String password) throws UserNotFoundException;
 
     
@@ -32,7 +34,9 @@ public interface MovieRatingDao {
     // Deletes the rating of a movie
     boolean deleteRating(Movie selectedMovie);
     
-    // Updates the rating of a movie
-    boolean updateRating(Movie selectedMovie, int newRating);
+    public double[] getAverageRating();
+    
+    public int[] getNumberRatings();
+    
     
 }

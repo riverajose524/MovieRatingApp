@@ -1,6 +1,9 @@
 package com.cognixia.jump.movierating;
 
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.cognixia.jump.movierating.dao.MovieRatingDaoImpl;
 import com.cognixia.jump.movierating.exception.UserNotFoundException;
 import java.sql.SQLException;
@@ -9,12 +12,15 @@ import com.cognixia.jump.movierating.data.Movie;
 import java.util.List;
 
 public class Menu {
+	
 
 	static MovieRatingDao mri = new MovieRatingDaoImpl();
 	private static Scanner scanner = new Scanner(System.in);
+	private static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+    private static final Pattern pattern = Pattern.compile(EMAIL_REGEX);
 
-	public static void mainMenu() {
 
+    public static void mainMenu() throws SQLException {
 		try {
 			mri.establishConnection();
 		} catch (ClassNotFoundException | SQLException e1) {
@@ -34,17 +40,17 @@ public class Menu {
 
 		switch (choice) {
 		case 1:
-			// Handle register
+			handleRegister();
+			mainMenu();
 			break;
 		case 2:
 			validateUser();
 			break;
 		case 3:
 			viewMovies();
-			// Handle view movies
 			break;
 		case 4:
-			// Handle exit
+			mri.closeConnection();
 			break;
 		default:
 			System.out.println("Invalid choice");
@@ -99,7 +105,6 @@ public class Menu {
 
 			break;
 		case 1:
-
 			break;
 		case 2:
 
@@ -121,9 +126,8 @@ public class Menu {
 		}
 	}
 
-	// function to validate user
-	public static void validateUser() {
-
+	//function to validate user
+	public static void validateUser() throws SQLException {
 		try {
 
 			mri.establishConnection();
@@ -186,7 +190,7 @@ public class Menu {
 
 	}
 
-	public static void loggedInMenu(int userId) {
+	public static void loggedInMenu(int userId) throws SQLException {
 		List<Movie> movies = mri.getAllMovies();
 		int exitChoice = movies.size() + 1;
 		int number = 1;
@@ -216,7 +220,7 @@ public class Menu {
 			
 			if(choice == exitChoice)
 			{
-				Menu.mainMenu();
+				mainMenu();
 			}
 			else if (choice < exitChoice && choice > 0)
 			{
@@ -234,5 +238,29 @@ public class Menu {
 
 		}
 	}
+	
+	
 
+    public static boolean isValidEmail(String email) {
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+    
+	public static void handleRegister() {
+		
+		System.out.println("Enter email: ");
+		scanner.nextLine();
+		String email = scanner.nextLine();
+	        
+	        if (isValidEmail(email)) {
+	        	
+	            System.out.println("Enter password: ");
+	            String password = scanner.nextLine();
+	            mri.register(email, password);
+	            
+	        } else {
+	            System.out.println("Invalid email address!");
+	        }
+	 
+	}
 }
