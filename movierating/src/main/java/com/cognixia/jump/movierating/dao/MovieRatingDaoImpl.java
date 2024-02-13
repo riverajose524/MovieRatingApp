@@ -183,10 +183,71 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 		return false;
 	}
 
+
 	@Override
-	public boolean updateRating(Movie selectedMovie, int newRating) {
-		// TODO Auto-generated method stub
-		return false;
+	public double[] getAverageRating() {
+
+		double[] avgRatings = null; // Initialize avgRatings
+	    List<Double> ratingList = new ArrayList<>(); // Initialize a list to store ratings
+
+	    try (Statement statement = connection.createStatement();
+	         ResultSet resSet = statement.executeQuery("SELECT AVG(movie_rating.rating) AS avg_rating\r\n"
+	         		+ "FROM movie\r\n"
+	         		+ "LEFT JOIN movie_rating on movie.id=movie_rating.movieID\r\n"
+	         		+ "group by movie.id;")) {
+	        while (resSet.next()) {
+	            double avgRating = resSet.getDouble("avg_rating");
+	            ratingList.add(avgRating); // Add average rating to the list
+	        }
+
+	        // Convert the list to double array
+	        avgRatings = new double[ratingList.size()];
+	        for (int i = 0; i < ratingList.size(); i++) {
+	            avgRatings[i] = ratingList.get(i);
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("A SQL exception has occurred while retrieving average ratings.");
+	        System.out.println(e.getMessage());
+	    }
+
+	    return avgRatings;
+	}
+
+	@Override
+	public int[] getNumberRatings() {
+		
+		int[] numRatings = null; // Initialize avgRatings
+	    List<Integer> ratingList = new ArrayList<>(); // Initialize a list to store ratings
+
+	    try (Statement statement = connection.createStatement();
+	         ResultSet resSet = statement.executeQuery("SELECT count(movie_rating.rating) AS num_ratings\r\n"
+	         		+ "FROM movie\r\n"
+	         		+ "LEFT JOIN movie_rating on movie.id=movie_rating.movieID\r\n"
+	         		+ "group by movie.id;")) {
+	        while (resSet.next()) {
+	            int numRating = resSet.getInt("num_ratings");
+	            ratingList.add(numRating); // Add average rating to the list
+	        }
+
+	        // Convert the list to double array
+	        numRatings = new int[ratingList.size()];
+	        for (int i = 0; i < ratingList.size(); i++) {
+	            numRatings[i] = ratingList.get(i);
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("A SQL exception has occurred while retrieving number ratings.");
+	        System.out.println(e.getMessage());
+	    }
+
+	    return numRatings;
+	}
+
+	@Override
+	public Connection getConnection() throws ClassNotFoundException, SQLException {
+		 if (connection == null) {
+	            connection = ConnectionManager.getConnection();
+	        }
+	        return connection;
 	}
 
 }
