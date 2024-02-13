@@ -62,20 +62,31 @@ public class Menu {
 		return scanner.nextInt();
 	}
 
-	static private void viewMovies() {
-		List<Movie> movies = mri.getAllMovies();
+	public static void viewMovies() throws SQLException {
+	    List<Movie> movies = mri.getAllMovies();
 
-		if (movies.isEmpty()) {
-			System.out.println("No movies found.");
-		} else {
-			System.out.println("+========================================================+");
-			System.out.println("| List of Movies                                         |");
-			System.out.println("+========================================================+");
-			for (Movie movie : movies) {
-				System.out.println("ID: " + movie.getId() + ", Name: " + movie.getName());
-			}
-			System.out.println("+========================================================+");
-		}
+	    if (movies.isEmpty()) {
+	        System.out.println("No movies found.");
+	    } else {
+	        System.out.println("+========================================================+");
+	        System.out.println("| List of Movies                                         |");
+	        System.out.println("+========================================================+");
+	        int number = 1;
+	        for (Movie movie : movies) {
+	            System.out.println(number + ": MOVIE NAME: " + movie.getName());
+	            number++;
+	        }
+	        int exitChoice = movies.size() + 1; 
+	        System.out.println(exitChoice + ": EXIT");
+	        System.out.println("+========================================================+");
+	        int choice = getChoice();
+
+	        if (choice == exitChoice) {
+	            mainMenu();
+	        } else {
+	            System.out.println("Invalid choice");
+	        }
+	    }
 	}
 
 	public void closeScanner() {
@@ -219,9 +230,19 @@ public class Menu {
 			    int spacesNumRatings = Math.max(0, 12 - numRatings.length()); // Adjust as needed
 			    
 			    // Construct the line with proper formatting
+			    // works with older version
 			    System.out.println("| " + number + ". " + movieName + " ".repeat(spacesMovieName) + avgRating + " ".repeat(spacesAvgRating) + numRatings + " ".repeat(spacesNumRatings) + " |");
-			    number++;
-			}
+			    
+			    //works with new java version
+//			    System.out.println("| " + number + ". " + movieName 
+//			    	    + String.format("%" + spacesMovieName + "s", "") 
+//			    	    + avgRating 
+//			    	    + String.format("%" + spacesAvgRating + "s", "") 
+//			    	    + numRatings 
+//			    	    + String.format("%" + spacesNumRatings + "s", "") 
+//			    	    + " |");
+//			    number++;
+//			}
 
 			System.out.println("| " + exitChoice + ". EXIT                                                                             |");
 			System.out.println("+=====================================================================================+");
