@@ -64,13 +64,22 @@ public class Menu {
             System.out.println("No movies found.");
         } else {
             System.out.println("+========================================================+");
-            System.out.println("| List of Movies                                         |");
-            System.out.println("+========================================================+");
             for (Movie movie : movies) {
-                System.out.println("ID: " + movie.getId() + ", Name: " + movie.getName());
+                System.out.println( movie.getId() + ": " + movie.getName());
             }
+            System.out.println("7: EXIT");
+            
             System.out.println("+========================================================+");
-        }
+            
+    		int choice = getChoice();
+
+    		switch (choice) {
+    		case 7:
+    			mainMenu();
+    			break;
+    		default:
+    			System.out.println("Invalid choice");
+    		}}
     }
 
 
@@ -80,7 +89,7 @@ public class Menu {
 
 	
 
-public void ratingMenu(String movieName) {
+public static void ratingMenu(String movieName) {
   System.out.println("+========================================================+");
   System.out.println("| Rating Menu:                                           |");
   System.out.println("+========================================================+");
@@ -118,7 +127,7 @@ public void ratingMenu(String movieName) {
           
           break;
       case 6:
-          
+          loggedInMenu(1);
           break;
       default:
           System.out.println("Invalid choice");
@@ -194,14 +203,42 @@ public void ratingMenu(String movieName) {
 	
 	
 	public static void loggedInMenu(int userId) {
-		
-		System.out.println("\n+========================================================+");
-		System.out.println("| Movie              Avg. Rating            # of Ratings |");
-		System.out.println("+========================================================+");
+	    System.out.println("\n+========================================================+");
+	    System.out.println("| Movie              Avg. Rating            # of Ratings |");
+	    List<Movie> movies = mri.getAllMovies();
+	    for (Movie movie : movies) {
+	        System.out.println(movie.getId() + ": " + movie.getName()); 
+	    }
+	    System.out.println("7: EXIT");
+	    int choice = getChoice();
+
+	    switch (choice) {
+	        case 1:
+	        case 2:
+	        case 3:
+	        case 4:
+	            Movie selectedMovie = null;
+	            for (Movie movie : movies) {
+	                if (movie.getId() == choice) {
+	                    selectedMovie = movie;
+	                    break;
+	                }
+	            }
+	            if (selectedMovie != null) {
+	                ratingMenu(selectedMovie.getName()); // Show rating menu for the selected movie
+	            } else {
+	                System.out.println("Invalid choice");
+	                loggedInMenu(userId);
+	            }
+	            break;
+	        case 7:
+	            // Back to main menu
+	            mainMenu();
+	            break;
+	        default:
+	            System.out.println("Invalid choice");
+	            loggedInMenu(userId);
+	    }
+	
 	}
-	
-	
-	
-	
-	
 }
