@@ -10,7 +10,6 @@ import java.util.List;
 
 public class Menu {
 
-	// private Scanner scanner;
 	static MovieRatingDao mri = new MovieRatingDaoImpl();
 	private static Scanner scanner = new Scanner(System.in);
 
@@ -190,6 +189,8 @@ public class Menu {
 	public static void loggedInMenu(int userId) {
 		List<Movie> movies = mri.getAllMovies();
 		int exitChoice = movies.size() + 1;
+		int number = 1;
+		
 		
 
 		if (movies.isEmpty()) {
@@ -200,10 +201,12 @@ public class Menu {
 			System.out.println("| Movie                          Avg. Rating                # of Ratings       |");
 
 			// Iterate through movies
-//			for (Movie movie : movies) {
-//			    System.out.printf("| %-30s %-30s %-20d |%n", movie.getName(), movie.getAvgRating().equals("N/A") ? "N/A" : String.format("%.1f", movie.getAvgRating()), movie.getNumOfRatings());
-//			    numOfMovies++;
-//			}
+			for (Movie movie : movies) {
+			    System.out.println("| " + number + ". " + movie.getName() );
+			    number++;
+			    ///System.out.printf("| %-30s %-30s %-20d |%n", movie.getName(),.equals("N/A") ? "N/A" : String.format("%.1f", movie.getAvgRating()), movie.getNumOfRatings());
+			    
+			}
 
 			System.out.println("| " + exitChoice + ". EXIT                                                                                   |");
 			System.out.println("+========================================================+");
@@ -217,7 +220,7 @@ public class Menu {
 			}
 			else if (choice < exitChoice && choice > 0)
 			{
-				String movieName = movies.get(choice).getName();
+				String movieName = movies.get(choice-1).getName();
 				
 				ratingMenu(movieName);
 				
