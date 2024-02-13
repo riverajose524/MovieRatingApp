@@ -183,10 +183,65 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 		return false;
 	}
 
+
 	@Override
-	public boolean updateRating(Movie selectedMovie, int newRating) {
-		// TODO Auto-generated method stub
-		return false;
+	public double[] getAverageRating() {
+
+		double[] avgRatings = null; // Initialize avgRatings
+	    List<Double> ratingList = new ArrayList<>(); // Initialize a list to store ratings
+
+	    try (Statement statement = connection.createStatement();
+	         ResultSet resSet = statement.executeQuery("SELECT avg(rating) as avg_rating FROM movie_rating GROUP BY movieID")) {
+	        while (resSet.next()) {
+	            double avgRating = resSet.getDouble("avg_rating");
+	            ratingList.add(avgRating); // Add average rating to the list
+	        }
+
+	        // Convert the list to double array
+	        avgRatings = new double[ratingList.size()];
+	        for (int i = 0; i < ratingList.size(); i++) {
+	            avgRatings[i] = ratingList.get(i);
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("A SQL exception has occurred while retrieving average ratings.");
+	        System.out.println(e.getMessage());
+	    }
+
+	    return avgRatings;
+	}
+
+	@Override
+	public int[] getNumberRatings() {
+		
+		int[] numRatings = null; // Initialize avgRatings
+	    List<Integer> ratingList = new ArrayList<>(); // Initialize a list to store ratings
+
+	    try (Statement statement = connection.createStatement();
+	         ResultSet resSet = statement.executeQuery("select count(rating) as num_ratings from movie_rating group by movieID;")) {
+	        while (resSet.next()) {
+	            int numRating = resSet.getInt("num_ratings");
+	            ratingList.add(numRating); // Add average rating to the list
+	        }
+
+	        // Convert the list to double array
+	        numRatings = new int[ratingList.size()];
+	        for (int i = 0; i < ratingList.size(); i++) {
+	            numRatings[i] = ratingList.get(i);
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("A SQL exception has occurred while retrieving number ratings.");
+	        System.out.println(e.getMessage());
+	    }
+
+	    return numRatings;
+	}
+
+	@Override
+	public Connection getConnection() throws ClassNotFoundException, SQLException {
+		 if (connection == null) {
+	            connection = ConnectionManager.getConnection();
+	        }
+	        return connection;
 	}
 
 }
