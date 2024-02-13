@@ -12,13 +12,6 @@ import java.util.List;
 
 public class Menu {
 	
-	private static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-    private static final Pattern pattern = Pattern.compile(EMAIL_REGEX);
-
-    public static boolean isValidEmail(String email) {
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
-    }
 
     //private Scanner scanner;
     static MovieRatingDao mri = new MovieRatingDaoImpl();
@@ -45,18 +38,8 @@ public class Menu {
 
 		switch (choice) {
 		case 1:
-			System.out.println("Enter email: ");
-			 scanner.nextLine();
-			 String email = scanner.nextLine();
-		        
-		        if (isValidEmail(email)) {
-		            System.out.println("Enter password: ");
-		            String password = scanner.nextLine();
-		            mri.register(email, password);
-		        } else {
-		            System.out.println("Invalid email address!");
-		        }
-			
+			handleRegister();
+			mainMenu();
 			break;
 		case 2:
 			Menu.validateUser();
@@ -224,6 +207,29 @@ public void ratingMenu(String movieName) {
 	
 	
 	
-	
-	
+	private static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+    private static final Pattern pattern = Pattern.compile(EMAIL_REGEX);
+
+    public static boolean isValidEmail(String email) {
+        Matcher matcher = pattern.matcher(email);
+        return matcher.matches();
+    }
+    
+	public static void handleRegister() {
+		
+		System.out.println("Enter email: ");
+		scanner.nextLine();
+		String email = scanner.nextLine();
+	        
+	        if (isValidEmail(email)) {
+	        	
+	            System.out.println("Enter password: ");
+	            String password = scanner.nextLine();
+	            mri.register(email, password);
+	            
+	        } else {
+	            System.out.println("Invalid email address!");
+	        }
+	 
+	}
 }
