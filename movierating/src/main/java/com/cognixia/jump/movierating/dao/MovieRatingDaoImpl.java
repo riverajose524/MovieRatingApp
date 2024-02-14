@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,10 +122,18 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 			int count = pstmt.executeUpdate();
 			
 			 if (count > 0) {
-	                System.out.println("Movie rating succesfully updated.");
+	                System.out.println("Movie rating succesfully entered.");
 	            }
-			} catch (SQLException e) {
-				System.out.println("A SQL exception has occured for the database while updating movie rating, the following exception was given.");
+		}catch (SQLIntegrityConstraintViolationException e) { // catch the duplicate entry exception
+			updateMovieRating(userId,selectedMovieId,rating);
+		}
+		
+	
+			catch (SQLException e) {
+				
+		        
+		        
+		        System.out.println("A SQL exception has occured for the database while updating movie rating, the following exception was given.");
 		        System.out.println(e.getMessage());
 			}
 				
