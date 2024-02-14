@@ -25,11 +25,11 @@ public interface MovieRatingDao {
     
     public List<Movie> getAllMovies();
     
-    public MovieRating rateMovie(Movie selectedMovie, int rating);
+    public void rateMovie(int userId, int selectedMovieId, int rating);
     
     public void register(String email, String password);
     
-    public void updateMovieRating(User user,Movie selectedMovie, int rating);
+	public void updateMovieRating(int userId, int selectedMovieId, int rating);
     
     // Deletes the rating of a movie
     boolean deleteRating(Movie selectedMovie);
