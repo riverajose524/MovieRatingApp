@@ -109,14 +109,14 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 	@Override
 	public void rateMovie(int userId, int selectedMovieId, int rating) {
 		
-		System.out.println("userId " + userId + " selectedMovieId " + selectedMovieId + " ratting " + rating);
 		
 		try (PreparedStatement pstmt = connection.prepareStatement(
 				"INSERT INTO movie_rating (movieID, userID, rating) VALUES (?,?,?)")){
-			
+
 			pstmt.setInt(1, selectedMovieId);
 			pstmt.setInt(2,  userId);
 			pstmt.setInt(3, rating);
+
 				
 			int count = pstmt.executeUpdate();
 			

@@ -5,8 +5,6 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.cognixia.jump.movierating.data.Movie;
-import com.cognixia.jump.movierating.data.MovieRating;
-import com.cognixia.jump.movierating.data.User;
 import com.cognixia.jump.movierating.exception.UserNotFoundException;
 
 
@@ -22,7 +20,6 @@ public interface MovieRatingDao {
     
     public int validateUser(String username, String password) throws UserNotFoundException;
 
-    
     public List<Movie> getAllMovies();
     
     public void rateMovie(int userId, int selectedMovieId, int rating);
