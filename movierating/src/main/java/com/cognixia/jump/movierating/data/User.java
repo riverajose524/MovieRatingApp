@@ -3,6 +3,8 @@ package com.cognixia.jump.movierating.data;
 //User Model Class
 public class User {
 
+	
+
 	// User's id
 	private int id;
 	
@@ -11,6 +13,8 @@ public class User {
 	
 	//User's password
 	private String password;
+	
+	private UserStatus status;
 
 	//Constructs the user object
 	public User(String email, String password) {
@@ -22,6 +26,14 @@ public class User {
 	//Get the user's id
 	public int getId() {
 		return id;
+	}
+
+	public UserStatus getStatus() {
+		return status;
+	}
+
+	public void setStatus(UserStatus status) {
+		this.status = status;
 	}
 
 	//Set the user's id
@@ -49,10 +61,9 @@ public class User {
 		this.password = password;
 	}
 
-	//Converts user object into a String object
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", email=" + email + ", password=" + password + "]";
+		return "User [id=" + id + ", email=" + email + ", password=" + password + ", status=" + status + "]";
 	}
 	
 	
