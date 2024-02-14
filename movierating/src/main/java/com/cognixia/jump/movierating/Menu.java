@@ -9,6 +9,8 @@ import com.cognixia.jump.movierating.exception.UserNotFoundException;
 import java.sql.SQLException;
 import com.cognixia.jump.movierating.dao.MovieRatingDao;
 import com.cognixia.jump.movierating.data.Movie;
+import com.cognixia.jump.movierating.data.User;
+
 import java.util.List;
 
 public class Menu {
@@ -93,7 +95,7 @@ public class Menu {
 		scanner.close();
 	}
 
-	public static void ratingMenu(String movieName) throws SQLException {
+	public static void ratingMenu(String movieName,int userID, int movieID) throws SQLException {
 		System.out.println("+========================================================+");
 		System.out.println("| Rating Menu:                                           |");
 		System.out.println("+========================================================+");
@@ -110,19 +112,31 @@ public class Menu {
 		System.out.println("+========================================================+");
 
 		int choice = getChoice();
-
+		
 		switch (choice) {
 		case 0:
+			mri.rateMovie(userID, movieID, choice);
+			loggedInMenu(userID);
 			break;
 		case 1:
+			mri.rateMovie(userID, movieID, choice);
+			loggedInMenu(userID);
 			break;
 		case 2:
+			mri.rateMovie(userID, movieID, choice);
+			loggedInMenu(userID);
 			break;
 		case 3:
+			mri.rateMovie(userID, movieID, choice);
+			loggedInMenu(userID);
 			break;
 		case 4:
+			mri.rateMovie(userID, movieID, choice);
+			loggedInMenu(userID);
 			break;
 		case 5:
+			mri.rateMovie(userID, movieID, choice);
+			loggedInMenu(userID);
 			break;
 		case 6:
 			loggedInMenu(1);
@@ -200,6 +214,7 @@ public class Menu {
 		int[] numberOfRatings = mri.getNumberRatings();
 		int exitChoice = movies.size() + 1;
 		int number = 1;
+		int movieId=-1;
 		String movieName = "";
 		
 		if (movies.isEmpty()) {
@@ -212,6 +227,7 @@ public class Menu {
 			// Iterate through movies
 			for(int i = 0; i < movies.size(); i++) {
 			    movieName = movies.get(i).getName();
+			    
 			    String avgRating="";
 			    
 			    if(avgRatings[i] > 0)
@@ -257,8 +273,10 @@ public class Menu {
 			else if (choice < exitChoice && choice > 0)
 			{
 				movieName = movies.get(choice-1).getName();
+				movieId=movies.get(choice-1).getId();
 				
-				ratingMenu(movieName);
+				
+				ratingMenu(movieName,userId,movieId);
 				
 			}
 			else
