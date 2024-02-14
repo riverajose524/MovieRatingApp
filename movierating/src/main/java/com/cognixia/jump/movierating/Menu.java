@@ -115,7 +115,8 @@ public class Menu {
 		
 		switch (choice) {
 		case 0:
-			mri.rateMovie(userID, movieID, choice);
+			
+			mri.rateMovie(userID, movieID, choice); // try to rate the movie
 			loggedInMenu(userID);
 			break;
 		case 1:
