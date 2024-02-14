@@ -11,8 +11,7 @@ import java.util.List;
 import com.cognixia.jump.movierating.connection.ConnectionManager;
 import com.cognixia.jump.movierating.data.Movie;
 
-import com.cognixia.jump.movierating.data.MovieRating;
-import com.cognixia.jump.movierating.data.User;
+
 import com.cognixia.jump.movierating.exception.UserNotFoundException;
 
 
@@ -108,20 +107,45 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 	}
 
 	@Override
-	public MovieRating rateMovie(Movie selectedMovie, int rating) {
-        try {
-            String sql = "INSERT INTO movie_ratings (movie_id, rating) VALUES (?, ?)";
-            PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setLong(1, selectedMovie.getId()); // Set movie ID
-            statement.setInt(2, rating); // Set rating
-            // Execute the SQL statement
-            statement.executeUpdate();
-            // Construct and return the MovieRating object
-            return new MovieRating(selectedMovie, rating);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+	public void rateMovie(int userId, int selectedMovieId, int rating) {
+		
+		
+		try (PreparedStatement pstmt = connection.prepareStatement(
+				"INSERT INTO movie_rating (movieID, userID, rating) VALUES (?,?,?)")){
+
+			pstmt.setInt(1, selectedMovieId);
+			pstmt.setInt(2,  userId);
+			pstmt.setInt(3, rating);
+
+				
+			int count = pstmt.executeUpdate();
+			
+			 if (count > 0) {
+	                System.out.println("Movie rating succesfully updated.");
+	            }
+			} catch (SQLException e) {
+				System.out.println("A SQL exception has occured for the database while updating movie rating, the following exception was given.");
+		        System.out.println(e.getMessage());
+			}
+				
+//        try {
+//            String sql = "INSERT INTO movie_rating (movieID, userID, rating) VALUES (?,?,?)";
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//            statement.setInt(1, selectedMovieId); // Set movie ID
+//            statement.setInt(2,userId);
+//            statement.setInt(3, rating); // Set; rating
+//            // Execute the SQL statement
+//            int count=statement.executeUpdate();
+//            if (count > 0) {
+//                System.out.println("Rating success.");
+//            }
+//            // Construct and return the MovieRating object
+//            
+//            return new MovieRating(selectedMovieId, userId,rating);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
 	}
 
 	@Override
@@ -146,14 +170,14 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 	}
 
 	@Override
-	public void updateMovieRating(User user, Movie selectedMovie, int rating) {
+	public void updateMovieRating(int userId, int selectedMovieId, int rating) {
 		
 		try (PreparedStatement pstmt = connection.prepareStatement(
 				"UPDATE movie_rating set rating=? where movieID=? and userID=?")){
 			
 			pstmt.setInt(1, rating);
-			pstmt.setInt(2,  selectedMovie.getId());
-			pstmt.setInt(3, user.getId());
+			pstmt.setInt(2,  selectedMovieId);
+			pstmt.setInt(3, userId);
 				
 			int count = pstmt.executeUpdate();
 			
