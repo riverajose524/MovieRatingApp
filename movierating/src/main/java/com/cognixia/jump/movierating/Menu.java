@@ -108,7 +108,8 @@ public class Menu {
 		System.out.println("| 3. Okay                                                |");
 		System.out.println("| 4. Good                                                |");
 		System.out.println("| 5. Great                                               |");
-		System.out.println("| 6. EXIT                                                |");
+		System.out.println("| 6. FAVOR                                               |");
+		System.out.println("| 7. EXIT                                                |");
 		System.out.println("+========================================================+");
 
 		int choice = getChoice();
@@ -140,6 +141,10 @@ public class Menu {
 			loggedInMenu(userID);
 			break;
 		case 6:
+			mri.favorMovie(userID, movieID);
+			loggedInMenu(userID);
+			break;
+		case 7:
 			loggedInMenu(1);
 			break;
 		default:
@@ -208,6 +213,35 @@ public class Menu {
 		return;
 
 	}
+	
+	public static void FavoriteMoviesMenu(int userId) throws SQLException {
+	    List<Movie> movies = mri.getAllFavoriteMovies(userId);
+
+	    if (movies.isEmpty()) {
+	        System.out.println("No movies found.");
+	        loggedInMenu(userId);
+	    } else {
+	        System.out.println("+========================================================+");
+	        System.out.println("| List of Favorite Movies                                |");
+	        System.out.println("+========================================================+");
+	        int number = 1;
+	        for (Movie movie : movies) {
+	            System.out.println(number + ": MOVIE NAME: " + movie.getName());
+	            number++;
+	        }
+	        int exitChoice = movies.size() + 1; 
+	        System.out.println(exitChoice + ": EXIT");
+	        System.out.println("+========================================================+");
+	        int choice = getChoice();
+
+	        if (choice == exitChoice) {
+	            loggedInMenu(userId);
+	        } else {
+	            System.out.println("Invalid choice");
+	        }
+	    }
+	}
+	
 
 	public static void loggedInMenu(int userId) throws SQLException {
 		List<Movie> movies = mri.getAllMovies();
@@ -261,15 +295,19 @@ public class Menu {
 //			    	    + " |");
 			    number++;
 	}
-
-			System.out.println("| " + exitChoice + ". EXIT                                                                             |");
+			System.out.println("| " + exitChoice + ". FAVORITES                                                                        |");
+			System.out.println("| " + (exitChoice+1) + ". EXIT                                                                             |");
 			System.out.println("+=====================================================================================+");
 
 			int choice = getChoice();
 			
-			if(choice == exitChoice)
+			if(choice == (exitChoice+1))
 			{
 				mainMenu();
+			}
+			else if(choice == exitChoice)
+			{
+				FavoriteMoviesMenu(userId);
 			}
 			else if (choice < exitChoice && choice > 0)
 			{
