@@ -108,6 +108,33 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 	}
 
 	@Override
+	public List<Movie> getAllFavoriteMovies(int userId) {
+	    List<Movie> movieList = new ArrayList<>();
+	    String sql = "SELECT movie.id, movie.name FROM movie " +
+	                 "JOIN favorites ON movie.id = favorites.movieID " +
+	                 "WHERE favorites.userID = ?";
+	    
+	    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+	        preparedStatement.setInt(1, userId);
+	        ResultSet resultSet = preparedStatement.executeQuery();
+	        
+	        while (resultSet.next()) {
+	            int id = resultSet.getInt("id");
+	            String name = resultSet.getString("name");
+	            Movie movie = new Movie(id, name);
+	            movieList.add(movie);
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("A SQL exception has occurred while retrieving favorite movies.");
+	        System.out.println(e.getMessage());
+	        movieList = new ArrayList<>();
+	    }
+	    
+	    return movieList;
+	}
+
+
+	@Override
 	public void rateMovie(int userId, int selectedMovieId, int rating) {
 		
 		
@@ -158,6 +185,54 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 	}
 
 	@Override
+	public void favorMovie(int userId, int selectedMovieId) {
+		
+		
+		try (PreparedStatement pstmt = connection.prepareStatement(
+				"INSERT INTO favorites (movieID, userID) VALUES (?,?)")){
+
+			pstmt.setInt(1, selectedMovieId);
+			pstmt.setInt(2,  userId);
+				
+			int count = pstmt.executeUpdate();
+			
+			 if (count > 0) {
+	                System.out.println("Movie was succesfully favored.");
+	            }
+		}catch (SQLIntegrityConstraintViolationException e) { // catch the duplicate entry exception
+			updateMovieFavorite(userId,selectedMovieId);
+		}
+		
+	
+			catch (SQLException e) {
+				
+		        
+		        
+		        System.out.println("A SQL exception has occured for the database while updating movie rating, the following exception was given.");
+		        System.out.println(e.getMessage());
+			}
+				
+//        try {
+//            String sql = "INSERT INTO movie_rating (movieID, userID, rating) VALUES (?,?,?)";
+//            PreparedStatement statement = connection.prepareStatement(sql);
+//            statement.setInt(1, selectedMovieId); // Set movie ID
+//            statement.setInt(2,userId);
+//            statement.setInt(3, rating); // Set; rating
+//            // Execute the SQL statement
+//            int count=statement.executeUpdate();
+//            if (count > 0) {
+//                System.out.println("Rating success.");
+//            }
+//            // Construct and return the MovieRating object
+//            
+//            return new MovieRating(selectedMovieId, userId,rating);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+	}
+	
+	@Override
 	public void register(String email, String password) {
 		
 		try (PreparedStatement pstmt = connection.prepareStatement(
@@ -200,6 +275,29 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 				
 		
 	}
+	
+	@Override
+	public void updateMovieFavorite(int userId, int selectedMovieId) {
+		
+		try (PreparedStatement pstmt = connection.prepareStatement(
+				"UPDATE favorites set where movieID=? and userID=?")){
+			
+			pstmt.setInt(1,  selectedMovieId);
+			pstmt.setInt(2, userId);
+				
+			int count = pstmt.executeUpdate();
+			
+			 if (count > 0) {
+	                System.out.println("Movie favorite succesfully updated.");
+	            }
+			} catch (SQLException e) {
+				System.out.println("A SQL exception has occured for the database while updating movie rating, the following exception was given.");
+		        System.out.println(e.getMessage());
+			}
+				
+		
+	}
+
 
 	@Override
 	public boolean deleteRating(Movie selectedMovie) {

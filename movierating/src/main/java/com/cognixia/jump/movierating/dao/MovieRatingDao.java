@@ -35,5 +35,11 @@ public interface MovieRatingDao {
     
     public int[] getNumberRatings();
     
+	public List<Movie> getAllFavoriteMovies(int userId);
+	
+	public void updateMovieFavorite(int userId, int selectedMovieId);
+	
+	public void favorMovie(int userId, int selectedMovieId);
+    
     
 }
