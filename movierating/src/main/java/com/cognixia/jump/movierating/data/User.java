@@ -22,7 +22,7 @@ public class User {
 		this.email = email;
 		this.password = password;
 	}
-
+	
 	//Get the user's id
 	public int getId() {
 		return id;
