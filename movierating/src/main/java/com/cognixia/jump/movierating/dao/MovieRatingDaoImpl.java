@@ -381,4 +381,27 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 	        return connection;
 	}
 
+	@Override
+	public void getRatedMoviesByUser(int userId) {
+		
+		
+		try (PreparedStatement preparedStatement = connection.prepareStatement(
+		        "SELECT movie.name, movie_rating.rating " +
+		        "FROM movie_rating INNER JOIN movie ON movie_rating.movieID = movie.id " +
+		        "WHERE movie_rating.userID = ?")) {
+		    preparedStatement.setInt(1, userId);
+		    try (ResultSet resSet = preparedStatement.executeQuery()) {
+		    	 while (resSet.next()) {
+		    		 String movieName = resSet.getString("name");
+		    	     int rating = resSet.getInt("rating");
+		    	     System.out.printf("| %-60s  %-21d |\n", movieName, rating);
+		    	 }
+		    }
+		} catch (SQLException e) {
+			 System.out.println("A SQL exception has occurred while retrieving rated movies list by user.");
+		     System.out.println(e.getMessage());
+		}
+       
+	}
+
 }

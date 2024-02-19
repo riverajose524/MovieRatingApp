@@ -41,5 +41,5 @@ public interface MovieRatingDao {
 	
 	public void favorMovie(int userId, int selectedMovieId);
     
-    
+    public void getRatedMoviesByUser(int userId);
 }
