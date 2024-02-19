@@ -21,7 +21,7 @@ CREATE TABLE user (
   userid INT PRIMARY KEY AUTO_INCREMENT,
   email VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
-  status enum('user', 'admin') NOT NULL DEFAULT 'user'
+  status enum('USER', 'ADMIN') NOT NULL DEFAULT 'USER'
 );
 
 -- Create table movie_rating 
@@ -38,3 +38,12 @@ CREATE TABLE favorites (
 	userID INT REFERENCES user(userid),
     PRIMARY KEY (movieID, userID)
   );
+  
+  -- Movie Inserts
+use movie_app;
+INSERT INTO movie (id, name) VALUES (1, 'The Shawshank Redemption');
+INSERT INTO movie (id, name) VALUES (2, 'The Godfather');
+INSERT INTO movie (id, name) VALUES (3, 'The Dark Knight');
+INSERT INTO movie (id, name) VALUES (4, 'Schindler''s List');
+INSERT INTO movie (id, name) VALUES (5, 'Pulp Fiction');
+INSERT INTO movie (id, name) VALUES (6, 'The Lord of the Rings: The Return of the King');
