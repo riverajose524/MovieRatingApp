@@ -10,19 +10,19 @@ import java.sql.SQLException;
 import com.cognixia.jump.movierating.dao.MovieRatingDao;
 import com.cognixia.jump.movierating.data.Movie;
 import com.cognixia.jump.movierating.data.User;
+import com.cognixia.jump.movierating.data.UserStatus;
 
 import java.util.List;
+import java.util.Optional;
 
 public class Menu {
-	
 
 	static MovieRatingDao mri = new MovieRatingDaoImpl();
 	private static Scanner scanner = new Scanner(System.in);
 	private static final String EMAIL_REGEX = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
-    private static final Pattern pattern = Pattern.compile(EMAIL_REGEX);
+	private static final Pattern pattern = Pattern.compile(EMAIL_REGEX);
 
-
-    public static void mainMenu() throws SQLException {
+	public static void mainMenu() throws SQLException {
 		try {
 			mri.establishConnection();
 		} catch (ClassNotFoundException | SQLException e1) {
@@ -65,41 +65,59 @@ public class Menu {
 	}
 
 	public static void viewMovies() throws SQLException {
-	    List<Movie> movies = mri.getAllMovies();
+		List<Movie> movies = mri.getAllMovies();
 
-	    if (movies.isEmpty()) {
-	        System.out.println("No movies found.");
-	    } else {
-	        System.out.println("+========================================================+");
-	        System.out.println("| List of Movies                                         |");
-	        System.out.println("+========================================================+");
-	        int number = 1;
-	        for (Movie movie : movies) {
-	            System.out.println(number + ": MOVIE NAME: " + movie.getName());
-	            number++;
-	        }
-	        int exitChoice = movies.size() + 1; 
-	        System.out.println(exitChoice + ": EXIT");
-	        System.out.println("+========================================================+");
-	        int choice = getChoice();
+		if (movies.isEmpty()) {
+			System.out.println("No movies found.");
+		} else {
+			System.out.println("+========================================================+");
+			System.out.println("| List of Movies                                         |");
+			System.out.println("+========================================================+");
+			int number = 1;
+			for (Movie movie : movies) {
+				System.out.println(number + ": MOVIE NAME: " + movie.getName());
+				number++;
+			}
+			int exitChoice = movies.size() + 1;
+			System.out.println(exitChoice + ": EXIT");
+			System.out.println("+========================================================+");
+			int choice = getChoice();
 
-	        if (choice == exitChoice) {
-	            mainMenu();
-	        } else {
-	            System.out.println("Invalid choice");
-	        }
-	    }
+			if (choice == exitChoice) {
+				mainMenu();
+			} else {
+				System.out.println("Invalid choice");
+			}
+		}
 	}
 
 	public static void closeScanner() {
 		scanner.close();
 	}
 
-	public static void ratingMenu(String movieName,int userID, int movieID) throws SQLException {
+	public static void ratingMenu(String movieName, int userID, int movieID) throws SQLException {
+		
+		Optional<User> user = mri.getUserById(userID);
+		String name = "";
+
+
+		int movieNameLength = movieName.length();
+		int totalWidth = 56; // Total width of the line, including characters for "| Movie: " and " |"
+		int remainingWidth = totalWidth - 9; // Subtracting characters for "| Movie: " to get the remaining width
+		String padding = ""; // Initialize padding string
+
+		// Calculate the number of spaces needed for padding
+		int paddingSpaces = remainingWidth - movieNameLength;
+
+		// Generate the padding string
+		for (int i = 0; i < paddingSpaces; i++) {
+		    padding += " ";
+		}
+
 		System.out.println("+========================================================+");
 		System.out.println("| Rating Menu:                                           |");
 		System.out.println("+========================================================+");
-		System.out.println("| Movie: " + movieName + "                        |");
+		System.out.println("| Movie: " + movieName + padding + " |");
 		System.out.println("|                                                        |");
 		System.out.println("| Rating:                                                |");
 		System.out.println("| 0. Really Bad                                          |");
@@ -108,51 +126,108 @@ public class Menu {
 		System.out.println("| 3. Okay                                                |");
 		System.out.println("| 4. Good                                                |");
 		System.out.println("| 5. Great                                               |");
-		System.out.println("| 6. FAVOR                                               |");
-		System.out.println("| 7. EXIT                                                |");
-		System.out.println("+========================================================+");
 
-		int choice = getChoice();
-		
-		switch (choice) {
-		case 0:
+		if (user.get().getStatus() == UserStatus.USER) {
+			System.out.println("| 6. FAVOR                                               |");
+			System.out.println("| 7. EXIT                                                |");
+			System.out.println("+========================================================+");
 			
-			mri.rateMovie(userID, movieID, choice); // try to rate the movie
-			loggedInMenu(userID);
-			break;
-		case 1:
-			mri.rateMovie(userID, movieID, choice);
-			loggedInMenu(userID);
-			break;
-		case 2:
-			mri.rateMovie(userID, movieID, choice);
-			loggedInMenu(userID);
-			break;
-		case 3:
-			mri.rateMovie(userID, movieID, choice);
-			loggedInMenu(userID);
-			break;
-		case 4:
-			mri.rateMovie(userID, movieID, choice);
-			loggedInMenu(userID);
-			break;
-		case 5:
-			mri.rateMovie(userID, movieID, choice);
-			loggedInMenu(userID);
-			break;
-		case 6:
-			mri.favorMovie(userID, movieID);
-			loggedInMenu(userID);
-			break;
-		case 7:
-			loggedInMenu(1);
-			break;
-		default:
-			System.out.println("Invalid choice");
+			int choice = getChoice();
+
+			switch (choice) {
+			case 0:
+				mri.rateMovie(userID, movieID, choice); // try to rate the movie
+				loggedInMenu(userID);
+				break;
+			case 1:
+				mri.rateMovie(userID, movieID, choice);
+				loggedInMenu(userID);
+				break;
+			case 2:
+				mri.rateMovie(userID, movieID, choice);
+				loggedInMenu(userID);
+				break;
+			case 3:
+				mri.rateMovie(userID, movieID, choice);
+				loggedInMenu(userID);
+				break;
+			case 4:
+				mri.rateMovie(userID, movieID, choice);
+				loggedInMenu(userID);
+				break;
+			case 5:
+				mri.rateMovie(userID, movieID, choice);
+				loggedInMenu(userID);
+				break;
+			case 6:
+				mri.favorMovie(userID, movieID);
+				loggedInMenu(userID);
+				break;
+			case 7:
+				loggedInMenu(1);
+				break;
+			default:
+				System.out.println("Invalid choice");
+			}
+
+		} else {
+			System.out.println("| 6. FAVOR                                               |");
+			System.out.println("| 7. UPDATE                                              |");
+			System.out.println("| 8. EXIT                                                |");
+			System.out.println("+========================================================+");
+			
+			int choice = getChoice();
+
+			switch (choice) {
+			case 0:
+
+				mri.rateMovie(userID, movieID, choice); // try to rate the movie
+				loggedInMenu(userID);
+				break;
+			case 1:
+				mri.rateMovie(userID, movieID, choice);
+				loggedInMenu(userID);
+				break;
+			case 2:
+				mri.rateMovie(userID, movieID, choice);
+				loggedInMenu(userID);
+				break;
+			case 3:
+				mri.rateMovie(userID, movieID, choice);
+				loggedInMenu(userID);
+				break;
+			case 4:
+				mri.rateMovie(userID, movieID, choice);
+				loggedInMenu(userID);
+				break;
+			case 5:
+				mri.rateMovie(userID, movieID, choice);
+				loggedInMenu(userID);
+				break;
+			case 6:
+				mri.favorMovie(userID, movieID);
+				loggedInMenu(userID);
+				break;
+			case 7:
+				System.out.println("Enter the movie name you wish to update the movie to");
+				scanner.nextLine(); // Consume newline character
+				name = scanner.nextLine();
+				mri.updateMovie(name, movieID);
+				loggedInMenu(userID);
+
+				break;
+			case 8:
+				loggedInMenu(userID);
+			default:
+				System.out.println("Invalid choice");
+			}
+
 		}
+		
+		
 	}
 
-	//function to validate user
+	// function to validate user
 	public static void validateUser() throws SQLException {
 		try {
 
@@ -182,8 +257,6 @@ public class Menu {
 			System.out.println("Please enter your password: ");
 			password = sc.nextLine();
 
-			
-			
 			int userId;
 
 			// Now pass that information to the DAO implementation class
@@ -213,35 +286,34 @@ public class Menu {
 		return;
 
 	}
-	
+
 	public static void FavoriteMoviesMenu(int userId) throws SQLException {
-	    List<Movie> movies = mri.getAllFavoriteMovies(userId);
+		List<Movie> movies = mri.getAllFavoriteMovies(userId);
 
-	    if (movies.isEmpty()) {
-	        System.out.println("No movies found.");
-	        loggedInMenu(userId);
-	    } else {
-	        System.out.println("+========================================================+");
-	        System.out.println("| List of Favorite Movies                                |");
-	        System.out.println("+========================================================+");
-	        int number = 1;
-	        for (Movie movie : movies) {
-	            System.out.println(number + ": MOVIE NAME: " + movie.getName());
-	            number++;
-	        }
-	        int exitChoice = movies.size() + 1; 
-	        System.out.println(exitChoice + ": EXIT");
-	        System.out.println("+========================================================+");
-	        int choice = getChoice();
+		if (movies.isEmpty()) {
+			System.out.println("No movies found.");
+			loggedInMenu(userId);
+		} else {
+			System.out.println("+========================================================+");
+			System.out.println("| List of Favorite Movies                                |");
+			System.out.println("+========================================================+");
+			int number = 1;
+			for (Movie movie : movies) {
+				System.out.println(number + ": MOVIE NAME: " + movie.getName());
+				number++;
+			}
+			int exitChoice = movies.size() + 1;
+			System.out.println(exitChoice + ": EXIT");
+			System.out.println("+========================================================+");
+			int choice = getChoice();
 
-	        if (choice == exitChoice) {
-	            loggedInMenu(userId);
-	        } else {
-	            System.out.println("Invalid choice");
-	        }
-	    }
+			if (choice == exitChoice) {
+				loggedInMenu(userId);
+			} else {
+				System.out.println("Invalid choice");
+			}
+		}
 	}
-	
 
 	public static void loggedInMenu(int userId) throws SQLException {
 		List<Movie> movies = mri.getAllMovies();
@@ -249,43 +321,43 @@ public class Menu {
 		int[] numberOfRatings = mri.getNumberRatings();
 		int exitChoice = movies.size() + 1;
 		int number = 1;
-		int movieId=-1;
+		int movieId = -1;
 		String movieName = "";
-		
+
 		if (movies.isEmpty()) {
 			System.out.println("No movies found.");
 		} else {
 
-			System.out.println("+=====================================================================================+");
-			System.out.println("| Movie                                                    Avg. Rating   # of Ratings |");
+			System.out
+					.println("+=====================================================================================+");
+			System.out
+					.println("| Movie                                                    Avg. Rating   # of Ratings |");
 
 			// Iterate through movies
-			for(int i = 0; i < movies.size(); i++) {
-			    movieName = movies.get(i).getName();
-			    
-			    String avgRating="";
-			    
-			    if(avgRatings[i] > 0)
-			    {
-			    	avgRating = String.format("%.2f", avgRatings[i]); // Format average rating to 2 decimal places
-			    }
-			    else
-			    {
-			    	avgRating = "N/A";
-			    }
-			    
-			    String numRatings = String.valueOf(numberOfRatings[i]);
-			    
-			    // Calculate the space needed to align the columns
-			    int spacesMovieName = Math.max(0, 54 - movieName.length()); // Adjust as needed
-			    int spacesAvgRating = Math.max(0, 14 - avgRating.length()); // Adjust as needed
-			    int spacesNumRatings = Math.max(0, 12 - numRatings.length()); // Adjust as needed
-			    
-			    // Construct the line with proper formatting
-			    // works with older version
-			    System.out.println("| " + number + ". " + movieName + " ".repeat(spacesMovieName) + avgRating + " ".repeat(spacesAvgRating) + numRatings + " ".repeat(spacesNumRatings) + " |");
-			    
-			    //works with new java version
+			for (int i = 0; i < movies.size(); i++) {
+				movieName = movies.get(i).getName();
+
+				String avgRating = "";
+
+				if (avgRatings[i] > 0) {
+					avgRating = String.format("%.2f", avgRatings[i]); // Format average rating to 2 decimal places
+				} else {
+					avgRating = "N/A";
+				}
+
+				String numRatings = String.valueOf(numberOfRatings[i]);
+
+				// Calculate the space needed to align the columns
+				int spacesMovieName = Math.max(0, 54 - movieName.length()); // Adjust as needed
+				int spacesAvgRating = Math.max(0, 14 - avgRating.length()); // Adjust as needed
+				int spacesNumRatings = Math.max(0, 12 - numRatings.length()); // Adjust as needed
+
+				// Construct the line with proper formatting
+				// works with older version
+				System.out.println("| " + number + ". " + movieName + " ".repeat(spacesMovieName) + avgRating
+						+ " ".repeat(spacesAvgRating) + numRatings + " ".repeat(spacesNumRatings) + " |");
+
+				// works with new java version
 //			    System.out.println("| " + number + ". " + movieName 
 //			    	    + String.format("%" + spacesMovieName + "s", "") 
 //			    	    + avgRating 
@@ -308,32 +380,21 @@ public class Menu {
 			else if(choice == (exitChoice+2))
 			{
 				mainMenu();
-			}
-			else if(choice == exitChoice)
-			{
+			} else if (choice == exitChoice) {
 				FavoriteMoviesMenu(userId);
-			}
-			else if (choice < exitChoice && choice > 0)
-			{
-				movieName = movies.get(choice-1).getName();
-				movieId=movies.get(choice-1).getId();
-				
-				
-				ratingMenu(movieName,userId,movieId);
-				
-			}
-			else
-			{
+			} else if (choice < exitChoice && choice > 0) {
+				movieName = movies.get(choice - 1).getName();
+				movieId = movies.get(choice - 1).getId();
+
+				ratingMenu(movieName, userId, movieId);
+
+			} else {
 				System.out.println("\nInvalid choice\n");
 				loggedInMenu(userId);
 			}
-			
-			}
-		}
-	
-	
-	
 
+		}
+    
     private static void ratedMoviesByUser(int userId) throws SQLException {
     	
 
@@ -344,26 +405,27 @@ public class Menu {
     	loggedInMenu(userId);
 	}
 
+
 	public static boolean isValidEmail(String email) {
-        Matcher matcher = pattern.matcher(email);
-        return matcher.matches();
-    }
-    
+		Matcher matcher = pattern.matcher(email);
+		return matcher.matches();
+	}
+
 	public static void handleRegister() {
-		
+
 		System.out.println("Enter email: ");
 		scanner.nextLine();
 		String email = scanner.nextLine();
-	        
-	        if (isValidEmail(email)) {
-	        	
-	            System.out.println("Enter password: ");
-	            String password = scanner.nextLine();
-	            mri.register(email, password);
-	            
-	        } else {
-	            System.out.println("Invalid email address!");
-	        }
-	 
+
+		if (isValidEmail(email)) {
+
+			System.out.println("Enter password: ");
+			String password = scanner.nextLine();
+			mri.register(email, password);
+
+		} else {
+			System.out.println("Invalid email address!");
+		}
+
 	}
 }
