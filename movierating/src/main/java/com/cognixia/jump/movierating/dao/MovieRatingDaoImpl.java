@@ -8,11 +8,12 @@ import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import com.cognixia.jump.movierating.connection.ConnectionManager;
 import com.cognixia.jump.movierating.data.Movie;
-
-
+import com.cognixia.jump.movierating.data.User;
+import com.cognixia.jump.movierating.data.UserStatus;
 import com.cognixia.jump.movierating.exception.UserNotFoundException;
 
 
@@ -106,6 +107,40 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 
         return movieList;
 	}
+	
+	public Optional<User> getUserById(int userId) {
+	    Optional<User> user = Optional.empty();
+
+	    String sql = "SELECT * FROM user WHERE userid = ?";
+
+	    try (PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+	        preparedStatement.setInt(1, userId);
+	        ResultSet resultSet = preparedStatement.executeQuery();
+
+	        if (resultSet.next()) {
+	            int id = resultSet.getInt("userid");
+	            String email = resultSet.getString("email");
+	            String password = resultSet.getString("password");
+	            String statusString = resultSet.getString("status"); // Assuming status is stored as a string in the database
+	            UserStatus status = UserStatus.valueOf(statusString.toUpperCase()); 
+	            
+
+	            User foundUser = new User(email, password);
+	            
+	            foundUser.setId(id);
+	            foundUser.setStatus(status);
+	           
+	            
+	            user = Optional.of(foundUser);
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("A SQL exception has occurred while retrieving the user by ID.");
+	        System.out.println(e.getMessage());
+	    }
+
+	    return user;
+	}
+
 
 	@Override
 	public List<Movie> getAllFavoriteMovies(int userId) {
@@ -379,6 +414,27 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 	            connection = ConnectionManager.getConnection();
 	        }
 	        return connection;
+	}
+	
+	@Override
+	public void updateMovie(String movieName, int movieId) {
+		
+		try (PreparedStatement pstmt = connection.prepareStatement(
+				"UPDATE movie set name = ? where id = ?")){
+				
+			pstmt.setString(1, movieName);
+			pstmt.setInt(2, movieId);
+			
+			int count = pstmt.executeUpdate();
+
+            if (count > 0) {
+                System.out.println("The Movie:  " + movieName +" succesfully updated.");
+            }
+		} catch (SQLException e) {
+			System.out.println("A SQL exception has occured for the database while adding a new user, the following exception was given.");
+	        System.out.println(e.getMessage());
+		}
+		
 	}
 
 }
