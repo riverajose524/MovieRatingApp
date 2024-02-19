@@ -420,7 +420,7 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 	public void updateMovie(String movieName, int movieId) {
 		
 		try (PreparedStatement pstmt = connection.prepareStatement(
-				"UPDATE movie set name = ? where movieID = ?")){
+				"UPDATE movie set name = ? where id = ?")){
 				
 			pstmt.setString(1, movieName);
 			pstmt.setInt(2, movieId);
@@ -428,7 +428,7 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 			int count = pstmt.executeUpdate();
 
             if (count > 0) {
-                System.out.println("Movie  " + movieName +" succesfully added.");
+                System.out.println("The Movie:  " + movieName +" succesfully updated.");
             }
 		} catch (SQLException e) {
 			System.out.println("A SQL exception has occured for the database while adding a new user, the following exception was given.");
