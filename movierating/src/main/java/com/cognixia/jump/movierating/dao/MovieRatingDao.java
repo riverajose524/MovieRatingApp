@@ -46,5 +46,5 @@ public interface MovieRatingDao {
 	
 	public Optional<User> getUserById(int userId);
     
-    
+    public void getRatedMoviesByUser(int userId);
 }

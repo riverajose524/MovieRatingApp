@@ -365,18 +365,20 @@ public class Menu {
 //			    	    + numRatings 
 //			    	    + String.format("%" + spacesNumRatings + "s", "") 
 //			    	    + " |");
-				number++;
-			}
-			System.out.println("| " + exitChoice
-					+ ". FAVORITES                                                                        |");
-			System.out.println("| " + (exitChoice + 1)
-					+ ". EXIT                                                                             |");
-			System.out
-					.println("+=====================================================================================+");
+			    number++;
+	}
+			System.out.println("| " + exitChoice + ". FAVORITES                                                                        |");
+			System.out.println("| " + (exitChoice +1)+ ". YOUR MOVIE RATINGS                                                               |");
+			System.out.println("| " + (exitChoice+2) + ". EXIT                                                                             |");
+			System.out.println("+=====================================================================================+");
 
 			int choice = getChoice();
-
-			if (choice == (exitChoice + 1)) {
+			
+			if (choice == (exitChoice+1)) {
+				ratedMoviesByUser(userId);
+			}
+			else if(choice == (exitChoice+2))
+			{
 				mainMenu();
 			} else if (choice == exitChoice) {
 				FavoriteMoviesMenu(userId);
@@ -392,7 +394,17 @@ public class Menu {
 			}
 
 		}
+    
+    private static void ratedMoviesByUser(int userId) throws SQLException {
+    	
+
+		System.out.println("+=====================================================================================+");
+		System.out.println("| Movie                                                         Rating                |");
+		
+    	mri.getRatedMoviesByUser(userId);
+    	loggedInMenu(userId);
 	}
+
 
 	public static boolean isValidEmail(String email) {
 		Matcher matcher = pattern.matcher(email);
