@@ -19,9 +19,9 @@ CREATE TABLE movie (
 -- Create table user 
 CREATE TABLE user (
   userid INT PRIMARY KEY AUTO_INCREMENT,
-  email VARCHAR(255) NOT NULL,
-  password VARCHAR(255) NOT NULL,
-  status enum('USER', 'ADMIN') NOT NULL DEFAULT 'USER'
+  email VARCHAR(255) NOT NULL DEFAULT 'guest@gmail.com',
+  password VARCHAR(255) NOT NULL DEFAULT 'password',
+  status enum('USER', 'ADMIN', 'GUEST') NOT NULL DEFAULT 'USER'
 );
 
 -- Create table movie_rating 
