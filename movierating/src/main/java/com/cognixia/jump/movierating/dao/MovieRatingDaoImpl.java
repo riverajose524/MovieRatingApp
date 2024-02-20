@@ -269,17 +269,30 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 	}
 	
 	@Override
-	public void register(String email, String password) {
+	public void register(String email, String password, UserStatus userStatus) {
 		
 		try (PreparedStatement pstmt = connection.prepareStatement(
-				"INSERT into user(email,password) values(?,?)")){
+				"INSERT into user(email,password, status) values(?,?,?)")){
+			
+			String userStatusAsString = "";
+			
+			if(userStatus == userStatus.GUEST)
+			{
+				userStatusAsString = "GUEST";
+				
+			}
+			else if (userStatus == userStatus.USER)
+			{
+				userStatusAsString = "USER";
+			}
 			
 			pstmt.setString(1, email);
 			pstmt.setString(2,  password);
+			pstmt.setString(3, userStatusAsString);
 			
 			int count = pstmt.executeUpdate();
 
-            if (count > 0) {
+            if (count > 0 && userStatus == userStatus.USER) {
                 System.out.println("User "+email+" succesfully added.");
             }
 		} catch (SQLException e) {

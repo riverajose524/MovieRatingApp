@@ -27,7 +27,7 @@ public interface MovieRatingDao {
     
     public void rateMovie(int userId, int selectedMovieId, int rating);
     
-    public void register(String email, String password);
+    public void register(String email, String password,UserStatus userStatus);
     
 	public void updateMovieRating(int userId, int selectedMovieId, int rating);
     

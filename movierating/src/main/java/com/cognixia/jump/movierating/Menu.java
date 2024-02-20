@@ -34,8 +34,9 @@ public class Menu {
 		System.out.println("+========================================================+");
 		System.out.println("| 1. REGISTER                                            |");
 		System.out.println("| 2. LOGIN                                               |");
-		System.out.println("| 3. VIEW MOVIES                                         |");
-		System.out.println("| 4. EXIT                                                |");
+		System.out.println("| 3. GUEST LOGIN                                         |");
+		System.out.println("| 4. VIEW MOVIES                                         |");
+		System.out.println("| 5. EXIT                                                |");
 		System.out.println("+========================================================+");
 
 		int choice = getChoice();
@@ -49,9 +50,12 @@ public class Menu {
 			validateUser();
 			break;
 		case 3:
-			viewMovies();
+			handleGuestLogin();
 			break;
 		case 4:
+			viewMovies();
+			break;
+		case 5:
 			mri.closeConnection();
 			break;
 		default:
@@ -98,10 +102,9 @@ public class Menu {
 	}
 
 	public static void ratingMenu(String movieName, int userID, int movieID) throws SQLException {
-		
+
 		Optional<User> user = mri.getUserById(userID);
 		String name = "";
-
 
 		int movieNameLength = movieName.length();
 		int totalWidth = 56; // Total width of the line, including characters for "| Movie: " and " |"
@@ -113,7 +116,7 @@ public class Menu {
 
 		// Generate the padding string
 		for (int i = 0; i < paddingSpaces; i++) {
-		    padding += " ";
+			padding += " ";
 		}
 
 		System.out.println("+========================================================+");
@@ -133,7 +136,7 @@ public class Menu {
 			System.out.println("| 6. FAVOR                                               |");
 			System.out.println("| 7. EXIT                                                |");
 			System.out.println("+========================================================+");
-			
+
 			int choice = getChoice();
 
 			switch (choice) {
@@ -172,12 +175,12 @@ public class Menu {
 				System.out.println("Invalid choice");
 			}
 
-		} else {
+		} else if (user.get().getStatus() == UserStatus.ADMIN) {
 			System.out.println("| 6. FAVOR                                               |");
 			System.out.println("| 7. UPDATE                                              |");
 			System.out.println("| 8. EXIT                                                |");
 			System.out.println("+========================================================+");
-			
+
 			int choice = getChoice();
 
 			switch (choice) {
@@ -225,8 +228,46 @@ public class Menu {
 			}
 
 		}
-		
-		
+		else
+		{
+			System.out.println("| 6. EXIT                                                |");
+			System.out.println("+========================================================+");
+			
+			int choice = getChoice();
+
+			switch (choice) {
+			case 0:
+				mri.rateMovie(userID, movieID, choice); // try to rate the movie
+				loggedInMenu(userID);
+				break;
+			case 1:
+				mri.rateMovie(userID, movieID, choice);
+				loggedInMenu(userID);
+				break;
+			case 2:
+				mri.rateMovie(userID, movieID, choice);
+				loggedInMenu(userID);
+				break;
+			case 3:
+				mri.rateMovie(userID, movieID, choice);
+				loggedInMenu(userID);
+				break;
+			case 4:
+				mri.rateMovie(userID, movieID, choice);
+				loggedInMenu(userID);
+				break;
+			case 5:
+				mri.rateMovie(userID, movieID, choice);
+				loggedInMenu(userID);
+				break;
+			case 6:
+				loggedInMenu(userID);
+				break;
+			default:
+				System.out.println("Invalid choice");
+			}
+		}
+
 	}
 
 	// function to validate user
@@ -369,59 +410,105 @@ public class Menu {
 //			    	    + numRatings 
 //			    	    + String.format("%" + spacesNumRatings + "s", "") 
 //			    	    + " |");
-//			    number++;
+			    number++;
 	}
-			System.out.println("| " + exitChoice + ". FAVORITES                                                                        |");
-			System.out.println("| " + (exitChoice +1)+ ". YOUR MOVIE RATINGS                                                               |");
-			System.out.println("| " + (exitChoice+2) + ". EXIT                                                                             |");
-			System.out.println("+=====================================================================================+");
+			
 			
 		    // Additional menu options for admin
 		    if (isAdmin) {
-		        System.out.println("| " + (exitChoice + 3) + ". ADD MOVIE                                           ");
+		        System.out.println("| " + exitChoice + ". ADD MOVIE                                                                        |");
+		        System.out.println("| " + (exitChoice + 1) + ". FAVORITES                                                                        |");
+				System.out.println("| " + (exitChoice + 2)+ ". YOUR MOVIE RATINGS                                                               |");
+				System.out.println("| " + (exitChoice+3) + ". EXIT                                                                            |");
+				
 				System.out.println("+=====================================================================================+");
+				
+				int choice = getChoice();
+
+				if (choice == (exitChoice + 2)) {
+					ratedMoviesByUser(userId);
+				} else if (choice == (exitChoice + 3)) {
+					mainMenu();
+				} else if (choice == exitChoice + 1) {
+					FavoriteMoviesMenu(userId);
+				}else if(choice == exitChoice) {   //ADMIN ADD MOVIE
+				    System.out.println("Enter the name of the movie you wish to add:");
+				    scanner.nextLine(); 
+				    movieName = scanner.nextLine();
+				    mri.addMovie(movieName);
+				    loggedInMenu(userId);
+				}else if (choice < exitChoice && choice > 0) {
+					movieName = movies.get(choice - 1).getName();
+					movieId = movies.get(choice - 1).getId();
+
+					ratingMenu(movieName, userId, movieId);
+
+				} else {
+
+					System.out.println("\nInvalid choice\n");
+					loggedInMenu(userId);
+				}	
 
 		    }
+		    else if (userStatus == UserStatus.USER)
+		    {
+		        System.out.println("| " + exitChoice + ". FAVORITES                                                                        |");
+				System.out.println("| " + (exitChoice + 1)+ ". YOUR MOVIE RATINGS                                                               |");
+				System.out.println("| " + (exitChoice + 2) + ". EXIT                                                                             |");
+				System.out.println("+=====================================================================================+");
+				
+				int choice = getChoice();
 
-			int choice = getChoice();
+				if (choice == (exitChoice + 1)) {
+					ratedMoviesByUser(userId);
+				} else if (choice == (exitChoice + 2)) {
+					mainMenu();
+				} else if (choice == exitChoice) {
+					FavoriteMoviesMenu(userId);
+				}else if (choice < exitChoice && choice > 0) {
+					movieName = movies.get(choice - 1).getName();
+					movieId = movies.get(choice - 1).getId();
+
+					ratingMenu(movieName, userId, movieId);
+				} else {
+
+					System.out.println("\nInvalid choice\n");
+					loggedInMenu(userId);
+				}	
+		    }
+		    else
+		    {
+		    	System.out.println("| " + exitChoice + ". EXIT                                                                             |");
+				System.out.println("+=====================================================================================+");
+				
+				int choice = getChoice();
+
+			     if (choice == (exitChoice)) {
+					mainMenu();
+				}else if (choice < exitChoice && choice > 0) {
+					movieName = movies.get(choice - 1).getName();
+					movieId = movies.get(choice - 1).getId();
+
+					ratingMenu(movieName, userId, movieId);
+				} else {
+
+					System.out.println("\nInvalid choice\n");
+					loggedInMenu(userId);
+				}	
+		    }
+
 			
-			if (choice == (exitChoice+1)) {
-				ratedMoviesByUser(userId);
-			}
-			else if(choice == (exitChoice+2))
-			{
-				mainMenu();
-			} else if (choice == exitChoice) {
-				FavoriteMoviesMenu(userId);
-			}else if(isAdmin && (choice == exitChoice + 3)) {   //ADMIN ADD MOVIE
-			    System.out.println("Enter the name of the movie you wish to add:");
-			    scanner.nextLine(); 
-			    movieName = scanner.nextLine();
-			    mri.addMovie(movieName);
-			    loggedInMenu(userId);
-			}else if (choice < exitChoice && choice > 0) {
-				movieName = movies.get(choice - 1).getName();
-				movieId = movies.get(choice - 1).getId();
-
-				ratingMenu(movieName, userId, movieId);
-
-			} else {
-				System.out.println("\nInvalid choice\n");
-				loggedInMenu(userId);
-			}}
-
 		}
-    
-    private static void ratedMoviesByUser(int userId) throws SQLException {
-    	
+	}
+
+	private static void ratedMoviesByUser(int userId) throws SQLException {
 
 		System.out.println("+=====================================================================================+");
 		System.out.println("| Movie                                                         Rating                |");
-		
-    	mri.getRatedMoviesByUser(userId);
-    	loggedInMenu(userId);
-	}
 
+		mri.getRatedMoviesByUser(userId);
+		loggedInMenu(userId);
+	}
 
 	public static boolean isValidEmail(String email) {
 		Matcher matcher = pattern.matcher(email);
@@ -438,11 +525,62 @@ public class Menu {
 
 			System.out.println("Enter password: ");
 			String password = scanner.nextLine();
-			mri.register(email, password);
+			mri.register(email, password, UserStatus.USER);
 
 		} else {
 			System.out.println("Invalid email address!");
 		}
 
 	}
+
+	public static void handleGuestLogin() throws SQLException {
+
+		String email = "guestUser@email.com";
+		String password = "pw123";
+		boolean isLoginValid = false;
+		
+		
+
+		mri.register(email, password, UserStatus.GUEST);
+		
+		try {
+
+			mri.establishConnection();
+
+		} catch (ClassNotFoundException | SQLException e1) {
+
+			System.out.println("\nCould not connect to the Movie App Database, application cannot run at this time.");
+		}
+		
+		// prompt user for Email & Password
+				do {
+
+					int userId;
+					// Now pass that information to the DAO implementation class
+
+					try {
+						userId = mri.validateUser(email, password);
+					} catch (UserNotFoundException e) {
+						System.out.println("\n" + e.getMessage());
+						userId = -1;
+					}
+
+					if (userId > 0) {
+
+						loggedInMenu(userId);
+
+						isLoginValid = true;
+
+					} else {
+						Menu.mainMenu();
+
+						isLoginValid = true;
+
+					}
+
+				} while (!isLoginValid);
+
+				return;
+
+			}
 }
