@@ -34,8 +34,9 @@ public class Menu {
 		System.out.println("+========================================================+");
 		System.out.println("| 1. REGISTER                                            |");
 		System.out.println("| 2. LOGIN                                               |");
-		System.out.println("| 3. VIEW MOVIES                                         |");
-		System.out.println("| 4. EXIT                                                |");
+		System.out.println("| 3. GUEST LOGIN                                         |");
+		System.out.println("| 4. VIEW MOVIES                                         |");
+		System.out.println("| 5. EXIT                                                |");
 		System.out.println("+========================================================+");
 
 		int choice = getChoice();
@@ -49,9 +50,12 @@ public class Menu {
 			validateUser();
 			break;
 		case 3:
-			viewMovies();
+			handleGuestLogin();
 			break;
 		case 4:
+			viewMovies();
+			break;
+		case 5:
 			mri.closeConnection();
 			break;
 		default:
@@ -96,10 +100,9 @@ public class Menu {
 	}
 
 	public static void ratingMenu(String movieName, int userID, int movieID) throws SQLException {
-		
+
 		Optional<User> user = mri.getUserById(userID);
 		String name = "";
-
 
 		int movieNameLength = movieName.length();
 		int totalWidth = 56; // Total width of the line, including characters for "| Movie: " and " |"
@@ -111,7 +114,7 @@ public class Menu {
 
 		// Generate the padding string
 		for (int i = 0; i < paddingSpaces; i++) {
-		    padding += " ";
+			padding += " ";
 		}
 
 		System.out.println("+========================================================+");
@@ -131,7 +134,7 @@ public class Menu {
 			System.out.println("| 6. FAVOR                                               |");
 			System.out.println("| 7. EXIT                                                |");
 			System.out.println("+========================================================+");
-			
+
 			int choice = getChoice();
 
 			switch (choice) {
@@ -175,7 +178,7 @@ public class Menu {
 			System.out.println("| 7. UPDATE                                              |");
 			System.out.println("| 8. EXIT                                                |");
 			System.out.println("+========================================================+");
-			
+
 			int choice = getChoice();
 
 			switch (choice) {
@@ -223,8 +226,7 @@ public class Menu {
 			}
 
 		}
-		
-		
+
 	}
 
 	// function to validate user
@@ -365,20 +367,22 @@ public class Menu {
 //			    	    + numRatings 
 //			    	    + String.format("%" + spacesNumRatings + "s", "") 
 //			    	    + " |");
-			    number++;
-	}
-			System.out.println("| " + exitChoice + ". FAVORITES                                                                        |");
-			System.out.println("| " + (exitChoice +1)+ ". YOUR MOVIE RATINGS                                                               |");
-			System.out.println("| " + (exitChoice+2) + ". EXIT                                                                             |");
-			System.out.println("+=====================================================================================+");
+				number++;
+			}
+			System.out.println("| " + exitChoice
+					+ ". FAVORITES                                                                        |");
+			System.out.println("| " + (exitChoice + 1)
+					+ ". YOUR MOVIE RATINGS                                                               |");
+			System.out.println("| " + (exitChoice + 2)
+					+ ". EXIT                                                                             |");
+			System.out
+					.println("+=====================================================================================+");
 
 			int choice = getChoice();
-			
-			if (choice == (exitChoice+1)) {
+
+			if (choice == (exitChoice + 1)) {
 				ratedMoviesByUser(userId);
-			}
-			else if(choice == (exitChoice+2))
-			{
+			} else if (choice == (exitChoice + 2)) {
 				mainMenu();
 			} else if (choice == exitChoice) {
 				FavoriteMoviesMenu(userId);
@@ -389,22 +393,21 @@ public class Menu {
 				ratingMenu(movieName, userId, movieId);
 
 			} else {
+
 				System.out.println("\nInvalid choice\n");
 				loggedInMenu(userId);
 			}
-
 		}
-    
-    private static void ratedMoviesByUser(int userId) throws SQLException {
-    	
+	}
+
+	private static void ratedMoviesByUser(int userId) throws SQLException {
 
 		System.out.println("+=====================================================================================+");
 		System.out.println("| Movie                                                         Rating                |");
-		
-    	mri.getRatedMoviesByUser(userId);
-    	loggedInMenu(userId);
-	}
 
+		mri.getRatedMoviesByUser(userId);
+		loggedInMenu(userId);
+	}
 
 	public static boolean isValidEmail(String email) {
 		Matcher matcher = pattern.matcher(email);
@@ -421,11 +424,62 @@ public class Menu {
 
 			System.out.println("Enter password: ");
 			String password = scanner.nextLine();
-			mri.register(email, password);
+			mri.register(email, password, UserStatus.USER);
 
 		} else {
 			System.out.println("Invalid email address!");
 		}
 
 	}
+
+	public static void handleGuestLogin() throws SQLException {
+
+		String email = "guestUser@email.com";
+		String password = "pw123";
+		boolean isLoginValid = false;
+		
+		
+
+		mri.register(email, password, UserStatus.GUEST);
+		
+		try {
+
+			mri.establishConnection();
+
+		} catch (ClassNotFoundException | SQLException e1) {
+
+			System.out.println("\nCould not connect to the Movie App Database, application cannot run at this time.");
+		}
+		
+		// prompt user for Email & Password
+				do {
+
+					int userId;
+					// Now pass that information to the DAO implementation class
+
+					try {
+						userId = mri.validateUser(email, password);
+					} catch (UserNotFoundException e) {
+						System.out.println("\n" + e.getMessage());
+						userId = -1;
+					}
+
+					if (userId > 0) {
+
+						loggedInMenu(userId);
+
+						isLoginValid = true;
+
+					} else {
+						Menu.mainMenu();
+
+						isLoginValid = true;
+
+					}
+
+				} while (!isLoginValid);
+
+				return;
+
+			}
 }
