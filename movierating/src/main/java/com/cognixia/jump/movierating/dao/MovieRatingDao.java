@@ -7,6 +7,7 @@ import java.util.Optional;
 
 import com.cognixia.jump.movierating.data.Movie;
 import com.cognixia.jump.movierating.data.User;
+import com.cognixia.jump.movierating.data.UserStatus;
 import com.cognixia.jump.movierating.exception.UserNotFoundException;
 
 
@@ -41,6 +42,11 @@ public interface MovieRatingDao {
 	public void updateMovieFavorite(int userId, int selectedMovieId);
 	
 	public void favorMovie(int userId, int selectedMovieId);
+	
+	// ADMIN FEATURES
+	public UserStatus getUserStatus(int userId);
+	
+	public void addMovie(String movieName);
 	
 	public void updateMovie(String movieName, int movieId);
 	
