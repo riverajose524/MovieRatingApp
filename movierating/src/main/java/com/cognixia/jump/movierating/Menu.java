@@ -360,7 +360,6 @@ public class Menu {
 
 	public static void loggedInMenu(int userId) throws SQLException {
 	    UserStatus userStatus = mri.getUserStatus(userId);
-	    boolean isAdmin = userStatus == UserStatus.ADMIN;
 		List<Movie> movies = mri.getAllMovies();
 		double[] avgRatings = mri.getAverageRating();
 		int[] numberOfRatings = mri.getNumberRatings();
@@ -410,10 +409,11 @@ public class Menu {
 //			    	    + numRatings 
 //			    	    + String.format("%" + spacesNumRatings + "s", "") 
 //			    	    + " |");
-			    number++;
-	}
+//			    number++;
+//	}
 			
 			
+		    boolean isAdmin = userStatus == UserStatus.ADMIN;
 		    // Additional menu options for admin
 		    if (isAdmin) {
 		        System.out.println("| " + exitChoice + ". ADD MOVIE                                                                        |");
