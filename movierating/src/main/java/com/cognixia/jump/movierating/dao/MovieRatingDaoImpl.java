@@ -1,6 +1,7 @@
 package com.cognixia.jump.movierating.dao;
 
 import java.sql.Statement;
+import java.sql.Types;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -449,6 +450,7 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 		}
 		
 	}
+	
 
 	@Override
 	public void getRatedMoviesByUser(int userId) {
@@ -471,6 +473,48 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 		     System.out.println(e.getMessage());
 		}
        
+	}
+
+	@Override
+	public UserStatus getUserStatus(int userId) {
+	    UserStatus userStatus = UserStatus.USER; // Default to regular user status
+	    try {
+	        // Create a PreparedStatement to query the database for the user's status
+	        String sql = "SELECT status FROM user WHERE userid = ?";
+	        PreparedStatement statement = connection.prepareStatement(sql);
+	        statement.setInt(1, userId);
+	        // Execute the query
+	        ResultSet resultSet = statement.executeQuery();
+	        // Check if a result is returned
+	        if (resultSet.next()) {
+	            // Retrieve the user's status from the result set
+	            String statusString = resultSet.getString("status");
+	           
+	            // Map the status string to the corresponding enum value
+	            userStatus = UserStatus.valueOf(statusString);
+	        }
+	       
+	        // Close resources
+	        resultSet.close();
+	        statement.close();
+	    } catch (SQLException e) {
+	        // Handle any SQL exceptions
+	        System.out.println("Error retrieving user status: " + e.getMessage());
+	    }
+	    return userStatus;
+	}
+	@Override
+	public void addMovie(String movieName) {
+	    String sql = "INSERT INTO movie (id, name) VALUES (?, ?)";
+	    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+	        // Assuming id is auto-incrementing, so set it to null
+	        statement.setNull(1, Types.INTEGER);
+	        statement.setString(2, movieName);
+	        statement.executeUpdate();
+	        System.out.println("Movie added successfully.");
+	    } catch (SQLException e) {
+	        System.out.println("An error occurred while adding the movie: " + e.getMessage());
+	    }       	
 	}
 
 }

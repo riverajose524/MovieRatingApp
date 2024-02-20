@@ -43,6 +43,11 @@ public interface MovieRatingDao {
 	
 	public void favorMovie(int userId, int selectedMovieId);
 	
+	// ADMIN FEATURES
+	public UserStatus getUserStatus(int userId);
+	
+	public void addMovie(String movieName);
+	
 	public void updateMovie(String movieName, int movieId);
 	
 	public Optional<User> getUserById(int userId);

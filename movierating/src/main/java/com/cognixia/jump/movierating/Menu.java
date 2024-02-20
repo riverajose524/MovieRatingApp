@@ -60,6 +60,7 @@ public class Menu {
 			break;
 		default:
 			System.out.println("Invalid choice");
+
 		}
 	}
 
@@ -94,6 +95,7 @@ public class Menu {
 			}
 		}
 	}
+	
 
 	public static void closeScanner() {
 		scanner.close();
@@ -318,6 +320,8 @@ public class Menu {
 	}
 
 	public static void loggedInMenu(int userId) throws SQLException {
+	    UserStatus userStatus = mri.getUserStatus(userId);
+	    boolean isAdmin = userStatus == UserStatus.ADMIN;
 		List<Movie> movies = mri.getAllMovies();
 		double[] avgRatings = mri.getAverageRating();
 		int[] numberOfRatings = mri.getNumberRatings();
@@ -367,16 +371,19 @@ public class Menu {
 //			    	    + numRatings 
 //			    	    + String.format("%" + spacesNumRatings + "s", "") 
 //			    	    + " |");
-				number++;
-			}
-			System.out.println("| " + exitChoice
-					+ ". FAVORITES                                                                        |");
-			System.out.println("| " + (exitChoice + 1)
-					+ ". YOUR MOVIE RATINGS                                                               |");
-			System.out.println("| " + (exitChoice + 2)
-					+ ". EXIT                                                                             |");
-			System.out
-					.println("+=====================================================================================+");
+//			    number++;
+	}
+			System.out.println("| " + exitChoice + ". FAVORITES                                                                        |");
+			System.out.println("| " + (exitChoice +1)+ ". YOUR MOVIE RATINGS                                                               |");
+			System.out.println("| " + (exitChoice+2) + ". EXIT                                                                             |");
+			System.out.println("+=====================================================================================+");
+			
+		    // Additional menu options for admin
+		    if (isAdmin) {
+		        System.out.println("| " + (exitChoice + 3) + ". ADD MOVIE                                           ");
+				System.out.println("+=====================================================================================+");
+
+		    }
 
 			int choice = getChoice();
 
@@ -386,7 +393,13 @@ public class Menu {
 				mainMenu();
 			} else if (choice == exitChoice) {
 				FavoriteMoviesMenu(userId);
-			} else if (choice < exitChoice && choice > 0) {
+			}else if(isAdmin && (choice == exitChoice + 3)) {   //ADMIN ADD MOVIE
+			    System.out.println("Enter the name of the movie you wish to add:");
+			    scanner.nextLine(); 
+			    movieName = scanner.nextLine();
+			    mri.addMovie(movieName);
+			    loggedInMenu(userId);
+			}else if (choice < exitChoice && choice > 0) {
 				movieName = movies.get(choice - 1).getName();
 				movieId = movies.get(choice - 1).getId();
 
