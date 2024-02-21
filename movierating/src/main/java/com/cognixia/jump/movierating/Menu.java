@@ -409,7 +409,7 @@ public class Menu {
 //			    	    + numRatings 
 //			    	    + String.format("%" + spacesNumRatings + "s", "") 
 //			    	    + " |");
-//			    number++;
+		    number++;
 	}
 			
 			
