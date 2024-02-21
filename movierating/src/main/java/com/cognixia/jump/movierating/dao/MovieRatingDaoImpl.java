@@ -517,4 +517,25 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 	    }       	
 	}
 
+	@Override
+	public boolean deleteMovie(int movieId) {
+	    String sql = "DELETE FROM movie WHERE id = ?";
+
+	    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+	        statement.setInt(1, movieId);
+	        int rowsDeleted = statement.executeUpdate();
+
+	        if (rowsDeleted > 0) {
+	            System.out.println("Movie deleted successfully.");
+	            return true;
+	        } else {
+	            System.out.println("No movie found with the given ID.");
+	            return false;
+	        }
+	    } catch (SQLException e) {
+	        System.out.println("An error occurred while deleting the movie: " + e.getMessage());
+	        return false;
+	    }
+	}
+
 }

@@ -410,16 +410,18 @@ public class Menu {
 //			    	    + String.format("%" + spacesNumRatings + "s", "") 
 //			    	    + " |");
 //			    number++;
-//	}
+	}
 			
 			
 		    boolean isAdmin = userStatus == UserStatus.ADMIN;
+
 		    // Additional menu options for admin
 		    if (isAdmin) {
 		        System.out.println("| " + exitChoice + ". ADD MOVIE                                                                        |");
 		        System.out.println("| " + (exitChoice + 1) + ". FAVORITES                                                                        |");
 				System.out.println("| " + (exitChoice + 2)+ ". YOUR MOVIE RATINGS                                                               |");
-				System.out.println("| " + (exitChoice+3) + ". EXIT                                                                            |");
+				System.out.println("| " + (exitChoice + 3)+ ". DELETE MOVIE                                                                    |");
+				System.out.println("| " + (exitChoice+ 4) + ". EXIT                                                                            |");
 				
 				System.out.println("+=====================================================================================+");
 				
@@ -427,11 +429,23 @@ public class Menu {
 
 				if (choice == (exitChoice + 2)) {
 					ratedMoviesByUser(userId);
-				} else if (choice == (exitChoice + 3)) {
+				} else if (choice == (exitChoice + 4)) {
 					mainMenu();
 				} else if (choice == exitChoice + 1) {
 					FavoriteMoviesMenu(userId);
-				}else if(choice == exitChoice) {   //ADMIN ADD MOVIE
+				}else if(choice == exitChoice + 3) {  //ADMIN DELETE MOVIE
+				    System.out.println("Enter the movie ID you wish to delete:");
+				    int movieIdToDelete = scanner.nextInt();
+				    scanner.nextLine(); 
+				    boolean deleteSuccess = mri.deleteMovie(movieIdToDelete);
+				    if(deleteSuccess) {
+				        System.out.println("Movie with ID: " + movieIdToDelete +  " deleted successfully.");
+				    } else {
+				        System.out.println("Failed to delete the movie with ID " + movieIdToDelete);
+				    }
+				    loggedInMenu(userId);
+				}
+					else if(choice == exitChoice) {   //ADMIN ADD MOVIE
 				    System.out.println("Enter the name of the movie you wish to add:");
 				    scanner.nextLine(); 
 				    movieName = scanner.nextLine();
