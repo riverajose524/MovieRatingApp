@@ -48,6 +48,8 @@ public interface MovieRatingDao {
 	
 	public void addMovie(String movieName);
 	
+	public boolean deleteMovie(int movieId);
+	
 	public void updateMovie(String movieName, int movieId);
 	
 	public Optional<User> getUserById(int userId);
