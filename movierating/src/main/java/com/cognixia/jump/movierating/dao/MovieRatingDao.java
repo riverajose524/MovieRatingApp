@@ -56,4 +56,6 @@ public interface MovieRatingDao {
 	public Optional<User> getUserById(int userId);
     
     public List<List<MovieRating>>  getRatedMoviesByUser(int userId);
+    
+    public boolean movieExists(String movieName);
 }

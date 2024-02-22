@@ -518,6 +518,11 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 	}
 	@Override
 	public void addMovie(String movieName) {
+	    // Check if the movie already exists
+	    if (movieExists(movieName)) {
+	        System.out.println("Movie already exists.");
+	        return;
+	    }
 	    String sql = "INSERT INTO movie (id, name) VALUES (?, ?)";
 	    try (PreparedStatement statement = connection.prepareStatement(sql)) {
 	        // Assuming id is auto-incrementing, so set it to null
@@ -549,6 +554,24 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 	        System.out.println("An error occurred while deleting the movie: " + e.getMessage());
 	        return false;
 	    }
+	}
+
+	@Override
+	public boolean movieExists(String movieName) {
+	    String sql = "SELECT COUNT(*) AS count FROM movie WHERE name = ?";
+	    try (PreparedStatement statement = connection.prepareStatement(sql)) {
+	        statement.setString(1, movieName);
+	        ResultSet resultSet = statement.executeQuery();
+	        if (resultSet.next()) {
+	            int count = resultSet.getInt("count");
+	            return count > 0;
+	        }
+	    }catch (SQLException e) {
+	        System.out.println("An error occurred while adding the movie: " + e.getMessage());
+	        return false;
+	    }
+	    
+		return false;
 	}
 
 }
