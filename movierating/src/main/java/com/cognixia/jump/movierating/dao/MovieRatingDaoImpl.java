@@ -13,6 +13,7 @@ import java.util.Optional;
 
 import com.cognixia.jump.movierating.connection.ConnectionManager;
 import com.cognixia.jump.movierating.data.Movie;
+import com.cognixia.jump.movierating.data.MovieRating;
 import com.cognixia.jump.movierating.data.User;
 import com.cognixia.jump.movierating.data.UserStatus;
 import com.cognixia.jump.movierating.exception.UserNotFoundException;
@@ -285,7 +286,7 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 			{
 				userStatusAsString = "USER";
 			}
-			
+			System.out.println("User status:"+userStatusAsString);
 			pstmt.setString(1, email);
 			pstmt.setString(2,  password);
 			pstmt.setString(3, userStatusAsString);
@@ -349,16 +350,20 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 
 
 	@Override
-	public boolean deleteRating(Movie selectedMovie) {
+	public boolean deleteRating(int userId, int movieId) {
         try {
             // Implementation for deleting a movie rating
-            String sql = "DELETE FROM movie_ratings WHERE movie_id = ?";
+            String sql = "DELETE FROM movie_rating WHERE movieID = ? and userID=?";
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setLong(1, selectedMovie.getId());
+            statement.setInt(1, movieId);
+            statement.setInt(2, userId);
+          
             int deletedRows = statement.executeUpdate();
-            return deletedRows > 0;
+            if( deletedRows > 0) {
+            	System.out.println("Rating succesfully deleted.");
+            }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("You haven't rated this movie yet.");
         }
 		return false;
 	}
@@ -453,25 +458,33 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 	
 
 	@Override
-	public void getRatedMoviesByUser(int userId) {
+	public List<List<MovieRating>>  getRatedMoviesByUser(int userId) {
 		
-		
+		   List<List<MovieRating>> ratedMovies = new ArrayList<>();
+
 		try (PreparedStatement preparedStatement = connection.prepareStatement(
-		        "SELECT movie.name, movie_rating.rating " +
+		        "SELECT movie.id, movie.name, movie_rating.rating " +
 		        "FROM movie_rating INNER JOIN movie ON movie_rating.movieID = movie.id " +
 		        "WHERE movie_rating.userID = ?")) {
 		    preparedStatement.setInt(1, userId);
 		    try (ResultSet resSet = preparedStatement.executeQuery()) {
+		    	int i=0;
 		    	 while (resSet.next()) {
+		    		 int id=resSet.getInt("id");
 		    		 String movieName = resSet.getString("name");
 		    	     int rating = resSet.getInt("rating");
-		    	     System.out.printf("| %-60s  %-21d |\n", movieName, rating);
+		    	     List<MovieRating> movieRatings = new ArrayList<>();
+		                movieRatings.add(new MovieRating(id, rating));
+		                ratedMovies.add(movieRatings);
+		    	     System.out.printf("|%d %-60s  %-21d |\n",i, movieName, rating);
+		    	     i++;
 		    	 }
 		    }
 		} catch (SQLException e) {
 			 System.out.println("A SQL exception has occurred while retrieving rated movies list by user.");
 		     System.out.println(e.getMessage());
 		}
+		return ratedMovies;
        
 	}
 

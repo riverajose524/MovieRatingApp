@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import com.cognixia.jump.movierating.data.Movie;
+import com.cognixia.jump.movierating.data.MovieRating;
 import com.cognixia.jump.movierating.data.User;
 import com.cognixia.jump.movierating.data.UserStatus;
 import com.cognixia.jump.movierating.exception.UserNotFoundException;
@@ -31,7 +32,7 @@ public interface MovieRatingDao {
     
 	public void updateMovieRating(int userId, int selectedMovieId, int rating);
     
-    boolean deleteRating(Movie selectedMovie);
+    boolean deleteRating(int userId,int movieId);
     
     public double[] getAverageRating();
     
@@ -54,5 +55,5 @@ public interface MovieRatingDao {
 	
 	public Optional<User> getUserById(int userId);
     
-    public void getRatedMoviesByUser(int userId);
+    public List<List<MovieRating>>  getRatedMoviesByUser(int userId);
 }
