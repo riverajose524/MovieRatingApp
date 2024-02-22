@@ -13,10 +13,12 @@ public class MovieRating {
 		this.rating = rating;
 	}
 	
-	public MovieRating(Movie selectedMovie, int rating2) {
-		// TODO Auto-generated constructor stub
+	public MovieRating(int movieID, int rating) {
+		super();
+		this.movieID = movieID;
+		this.rating = rating;
 	}
-
+	
 	public int getMovieID() {
 		return movieID;
 	}

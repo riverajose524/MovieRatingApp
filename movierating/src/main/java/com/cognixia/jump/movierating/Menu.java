@@ -9,6 +9,7 @@ import com.cognixia.jump.movierating.exception.UserNotFoundException;
 import java.sql.SQLException;
 import com.cognixia.jump.movierating.dao.MovieRatingDao;
 import com.cognixia.jump.movierating.data.Movie;
+import com.cognixia.jump.movierating.data.MovieRating;
 import com.cognixia.jump.movierating.data.User;
 import com.cognixia.jump.movierating.data.UserStatus;
 
@@ -134,32 +135,18 @@ public class Menu {
 
 		if (user.get().getStatus() == UserStatus.USER) {
 			System.out.println("| 6. FAVOR                                               |");
-			System.out.println("| 7. EXIT                                                |");
+			System.out.println("| 7. DELETE                                              |");
+			System.out.println("| 8. EXIT                                                |");
 			System.out.println("+========================================================+");
 
 			int choice = getChoice();
 
 			switch (choice) {
 			case 0:
-				mri.rateMovie(userID, movieID, choice); // try to rate the movie
-				loggedInMenu(userID);
-				break;
 			case 1:
-				mri.rateMovie(userID, movieID, choice);
-				loggedInMenu(userID);
-				break;
 			case 2:
-				mri.rateMovie(userID, movieID, choice);
-				loggedInMenu(userID);
-				break;
 			case 3:
-				mri.rateMovie(userID, movieID, choice);
-				loggedInMenu(userID);
-				break;
 			case 4:
-				mri.rateMovie(userID, movieID, choice);
-				loggedInMenu(userID);
-				break;
 			case 5:
 				mri.rateMovie(userID, movieID, choice);
 				loggedInMenu(userID);
@@ -169,6 +156,10 @@ public class Menu {
 				loggedInMenu(userID);
 				break;
 			case 7:
+				mri.deleteRating(userID, movieID);
+				loggedInMenu(userID);
+				break;
+			case 8:
 				loggedInMenu(1);
 				break;
 			default:
@@ -185,26 +176,10 @@ public class Menu {
 
 			switch (choice) {
 			case 0:
-
-				mri.rateMovie(userID, movieID, choice); // try to rate the movie
-				loggedInMenu(userID);
-				break;
 			case 1:
-				mri.rateMovie(userID, movieID, choice);
-				loggedInMenu(userID);
-				break;
 			case 2:
-				mri.rateMovie(userID, movieID, choice);
-				loggedInMenu(userID);
-				break;
 			case 3:
-				mri.rateMovie(userID, movieID, choice);
-				loggedInMenu(userID);
-				break;
 			case 4:
-				mri.rateMovie(userID, movieID, choice);
-				loggedInMenu(userID);
-				break;
 			case 5:
 				mri.rateMovie(userID, movieID, choice);
 				loggedInMenu(userID);
@@ -237,25 +212,10 @@ public class Menu {
 
 			switch (choice) {
 			case 0:
-				mri.rateMovie(userID, movieID, choice); // try to rate the movie
-				loggedInMenu(userID);
-				break;
 			case 1:
-				mri.rateMovie(userID, movieID, choice);
-				loggedInMenu(userID);
-				break;
 			case 2:
-				mri.rateMovie(userID, movieID, choice);
-				loggedInMenu(userID);
-				break;
 			case 3:
-				mri.rateMovie(userID, movieID, choice);
-				loggedInMenu(userID);
-				break;
 			case 4:
-				mri.rateMovie(userID, movieID, choice);
-				loggedInMenu(userID);
-				break;
 			case 5:
 				mri.rateMovie(userID, movieID, choice);
 				loggedInMenu(userID);
@@ -516,12 +476,12 @@ public class Menu {
 	}
 
 	private static void ratedMoviesByUser(int userId) throws SQLException {
-
+		
 		System.out.println("+=====================================================================================+");
 		System.out.println("| Movie                                                         Rating                |");
 
 		mri.getRatedMoviesByUser(userId);
-		loggedInMenu(userId);
+		loggedInMenu(userId);		
 	}
 
 	public static boolean isValidEmail(String email) {
