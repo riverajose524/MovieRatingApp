@@ -139,9 +139,9 @@ public class Menu {
 		System.out.println("| 5. Great                                               |" + RESET);
 
 		if (user.get().getStatus() == UserStatus.USER) {
-			System.out.println("| 6. FAVOR                                               |");
-			System.out.println("| 7. DELETE                                              |");
-			System.out.println("| 8. EXIT                                                |");
+			System.out.println(CYAN+"| 6. FAVORITE MOVIE                                      |");
+			System.out.println("| 7. UNDO RATING                                         |"+RESET);
+			System.out.println(RED+"|"+ " 8. EXIT                                                |"+RESET);
 			System.out.println("+========================================================+");
 
 			int choice = getChoice();
@@ -305,11 +305,11 @@ public class Menu {
 			System.out.println("+========================================================+");
 			int number = 1;
 			for (Movie movie : movies) {
-				System.out.println(number + ": MOVIE NAME: " + movie.getName());
+				System.out.println(YELLOW + number + ": MOVIE NAME: " + movie.getName() + RESET);
 				number++;
 			}
 			int exitChoice = movies.size() + 1;
-			System.out.println(exitChoice + ": EXIT");
+			System.out.println(RED + exitChoice + ": EXIT"+RESET);
 			System.out.println("+========================================================+");
 			int choice = getChoice();
 
@@ -365,9 +365,9 @@ public class Menu {
 //						+ " ".repeat(spacesAvgRating) + numRatings + " ".repeat(spacesNumRatings) + " |");
 
 				// works with new java version
-				System.out.println(YELLOW + "| " + number + ". " + movieName + String.format("%" + spacesMovieName + "s", "")
+				System.out.println("| " +YELLOW+ number + ". " + movieName + String.format("%" + spacesMovieName + "s", "")
 						+ avgRating + String.format("%" + spacesAvgRating + "s", "") + numRatings
-						+ String.format("%" + spacesNumRatings + "s", "") + " |"+RESET);
+						+ String.format("%" + spacesNumRatings + "s", "") +RESET+ " |");
 				number++;
 			}
 
@@ -376,15 +376,15 @@ public class Menu {
 			// Additional menu options for admin
 			if (isAdmin) {
 				System.out.println("| " + PURPLE + exitChoice
-						+  ". ADD MOVIE                                                                         |"+RESET);
-				System.out.println("| " + (exitChoice + 1)
-						+ ". FAVORITES                                                                        |"+ RESET);
-				System.out.println("| " + (exitChoice + 2)
-						+ ". YOUR MOVIE RATINGS                                                               |"+RESET);
+						+  ". ADD MOVIE"+RESET +"                                                                        |");
+				System.out.println("| " +CYAN+ (exitChoice + 1)
+						+ ". FAVORITES"+RESET+"                                                                        |");
+				System.out.println("| " +CYAN+ (exitChoice + 2)
+						+ ". YOUR MOVIE RATINGS"+RESET+"                                                               |");
 				System.out.println("| " + PURPLE + (exitChoice + 3)
-						+ ". DELETE MOVIE                                                                      |"+RESET);
+						+ ". DELETE MOVIE"+RESET+"                                                                    |");
 				System.out.println("| " + RED+ (exitChoice + 4)
-						+ ". EXIT                                                                            |"+RESET);
+						+ ". EXIT"+RESET+"                                                                            |");
 
 				System.out.println(
 						"+=====================================================================================+");
@@ -427,12 +427,12 @@ public class Menu {
 				}
 
 			} else if (userStatus == UserStatus.USER) {
-				System.out.println("| " + exitChoice
-						+ ". FAVORITES                                                                        |");
-				System.out.println("| " + (exitChoice + 1)
-						+ ". YOUR MOVIE RATINGS                                                               |");
-				System.out.println("| " + (exitChoice + 2)
-						+ ". EXIT                                                                             |");
+				System.out.println("| "  +CYAN + exitChoice
+						+ ". FAVORITES"+RESET+"                                                                        |");
+				System.out.println("| " +CYAN + (exitChoice + 1)
+						+ ". YOUR MOVIE RATINGS"+RESET+"                                                               |");
+				System.out.println("| "+ RED + (exitChoice + 2)
+						+ ". EXIT"+RESET+"                                                                             |");
 				System.out.println(
 						"+=====================================================================================+");
 
