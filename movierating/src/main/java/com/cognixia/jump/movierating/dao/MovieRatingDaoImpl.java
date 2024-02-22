@@ -476,7 +476,7 @@ public class MovieRatingDaoImpl implements MovieRatingDao{
 		    	     List<MovieRating> movieRatings = new ArrayList<>();
 		                movieRatings.add(new MovieRating(id, rating));
 		                ratedMovies.add(movieRatings);
-		    	     System.out.printf("|%d %-60s  %-21d |\n",i, movieName, rating);
+		    	     System.out.printf("|%d %-60s  %-21d |\n",i+1, movieName, rating);
 		    	     i++;
 		    	 }
 		    }
